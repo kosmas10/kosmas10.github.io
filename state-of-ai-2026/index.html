@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The State of AI — 2026 and Beyond</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --surface-2: #ebebef;
+    --border: #d1d1d6;
+    --text: #1a1a1a;
+    --text-dim: #4a4a4a;
+    --accent: #4338ca;
+    --accent-glow: rgba(67,56,202,0.07);
+    --warm: #b45309;
+    --warm-glow: rgba(180,83,9,0.05);
+    --green: #047857;
+    --rose: #be123c;
+    --cyan: #0e7490;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulse 8s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  }
+
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    position: relative;
+    max-width: 900px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    margin-top: 1.5rem;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .hero-meta {
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  .scroll-hint .arrow { font-size: 1.2rem; }
+
+  /* ── Navigation ── */
+  .toc {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  .toc a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: all 0.25s;
+    flex-shrink: 0;
+  }
+
+  .toc a:hover, .toc a.active {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  /* ── Content Structure ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-child { border-bottom: none; }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+
+  p strong { color: var(--text); font-weight: 500; }
+
+  /* ── Callout Boxes ── */
+  .callout {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .callout.warm { border-left-color: var(--warm); }
+  .callout.green { border-left-color: var(--green); }
+  .callout.rose { border-left-color: var(--rose); }
+  .callout.cyan { border-left-color: var(--cyan); }
+
+  .callout p { margin-bottom: 0; font-size: 0.95rem; }
+  .callout p:not(:last-child) { margin-bottom: 0.75rem; }
+
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .callout.warm .callout-label { color: var(--warm); }
+  .callout.green .callout-label { color: var(--green); }
+  .callout.rose .callout-label { color: var(--rose); }
+  .callout.cyan .callout-label { color: var(--cyan); }
+
+  /* ── Stat Grid ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-card .number.accent { color: var(--accent); }
+  .stat-card .number.warm { color: var(--warm); }
+  .stat-card .number.green { color: var(--green); }
+  .stat-card .number.rose { color: var(--rose); }
+  .stat-card .number.cyan { color: var(--cyan); }
+
+  .stat-card .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    position: relative;
+    margin: 2.5rem 0;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--cyan), var(--green));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.35rem;
+    top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .timeline-item .year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .timeline-item .event {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Subsection nav dots ── */
+  .sub-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .sub-topic-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.75rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+
+  .sub-topic-pill:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-glow);
+  }
+
+  /* ── Separator ── */
+  .sep {
+    width: 60px;
+    height: 2px;
+    background: var(--border);
+    margin: 3rem 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  .footer .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Source Links ── */
+  a.src {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+    transition: all 0.2s;
+    font-size: inherit;
+  }
+  a.src:hover {
+    color: #3730a3;
+    border-bottom-color: #3730a3;
+  }
+  .stat-card a.src {
+    font-size: 0.7rem;
+    border-bottom: none;
+  }
+  .stat-card a.src:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 3rem 0; }
+    .container { padding: 0 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <span class="hero-label">AI Intelligence Briefing · March 2026</span>
+  <h1>The State of <em>AI</em><br>2026 & Beyond</h1>
+  <p class="hero-sub">A comprehensive briefing on where artificial intelligence stands today, where it is heading, and what it means for software companies, investors, and the workforce.</p>
+  <span class="hero-meta">Prepared by Kosmas Karadimitriou · March 2026</span>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <span class="arrow">↓</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<nav class="toc" id="toc">
+  <a href="#history">History</a>
+  <a href="#trends">2026 Trends</a>
+  <a href="#saas">SaaS Impact</a>
+  <a href="#jobs">Jobs & People</a>
+  <a href="#ics">ICs & Leads</a>
+  <a href="#agents-how">Building Agents</a>
+  <a href="#outlook">Outlook</a>
+</nav>
+
+<!-- ═══════════════════ CONTENT ═══════════════════ -->
+<main>
+
+<!-- ─── SECTION 1: History ─── -->
+<section id="history">
+<div class="container">
+  <span class="section-number">01 — Historical Context</span>
+  <h2>History of AI — Where We Are Today</h2>
+
+  <p>Artificial intelligence is not new. Its intellectual roots stretch back to the 1950s, when Alan Turing posed the question "Can machines think?" What <em>is</em> new is the astonishing acceleration of the last few years — a period that has compressed decades of theoretical promise into tangible, world-altering capability.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="year">1950s–1970s</span>
+      <span class="event"><strong>The symbolic era.</strong> Rule-based systems, expert systems, and early neural networks. AI was a research curiosity, punctuated by "AI winters" when funding dried up after inflated promises.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">1980s–2000s</span>
+      <span class="event"><strong>Machine learning rises.</strong> Statistical methods overtook hand-coded rules. SVMs, decision trees, and early deep learning laid groundwork. IBM's Deep Blue beat Kasparov in 1997.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2012</span>
+      <span class="event"><strong>The deep learning breakout.</strong> AlexNet won ImageNet by a huge margin, proving deep convolutional networks could learn to see. GPU-accelerated training became the new paradigm.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2017</span>
+      <span class="event"><strong>"Attention Is All You Need."</strong> Google researchers introduced the Transformer architecture. This single paper became the foundation for GPT, BERT, and every major language model that followed.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2020–2022</span>
+      <span class="event"><strong>Scaling laws emerge.</strong> OpenAI's GPT-3 (175 billion parameters) proved that simply making models larger and feeding them more data produced emergent, surprising abilities. Google's AlphaFold solved 50-year-old protein folding problem.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">Nov 2022</span>
+      <span class="event"><strong>ChatGPT launches.</strong> 100 million users in two months — the fastest consumer adoption in history. AI became a mainstream conversation overnight.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2023–2024</span>
+      <span class="event"><strong>The great frontier race.</strong> GPT-4, Claude 3, Gemini, Llama 3, and dozens more. Multi-modal models see images, hear speech, write code. The 2024 Nobel Prizes in Chemistry and Physics were awarded to AI pioneers.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">Jan 2025</span>
+      <span class="event"><strong>DeepSeek R1 shock.</strong> A Chinese lab matched frontier performance with dramatically more efficient architectures, proving that state-of-the-art capability no longer requires the largest budgets.</span>
+    </div>
+    <div class="timeline-item">
+      <span class="year">2025–2026</span>
+      <span class="event"><strong>The agentic era begins.</strong> AI systems move from answering questions to executing multi-step workflows. MCP standardizes how agents connect to data and tools. The SaaS market begins its largest structural repricing in 20 years.</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="callout-label">Where we stand</span>
+    <p><strong>AI in March 2026 is roughly where the internet was in 1997.</strong> We have proven the technology works, early adopters are seeing transformative results, but the vast majority of industries have barely begun to integrate it. The infrastructure layer is being built — and whoever builds on it fastest will define the next decade.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 2: Big Trends ─── -->
+<section id="trends">
+<div class="container">
+  <span class="section-number">02 — Big Trends for 2026</span>
+  <h2>The Ten Forces Reshaping the World</h2>
+
+  <div class="sub-topics">
+    <a class="sub-topic-pill" href="#t-agents">Agents Proliferate</a>
+    <a class="sub-topic-pill" href="#t-mcp">MCP Servers</a>
+    <a class="sub-topic-pill" href="#t-costs">Managing AI Costs</a>
+    <a class="sub-topic-pill" href="#t-trajectory">Intelligence & Cost Trajectory</a>
+    <a class="sub-topic-pill" href="#t-labor">Labor Market</a>
+    <a class="sub-topic-pill" href="#t-builders">Builders & Creators</a>
+    <a class="sub-topic-pill" href="#t-consumers">Era of Abundance</a>
+    <a class="sub-topic-pill" href="#t-science">Sciences</a>
+    <a class="sub-topic-pill" href="#t-health">Health & Longevity</a>
+    <a class="sub-topic-pill" href="#t-robots">Robotics Revolution</a>
+  </div>
+
+  <!-- Agents -->
+  <h3 id="t-agents">AI Agents Proliferate</h3>
+  <p>2026 marks the shift from AI as a conversational tool to AI as a doer. The first wave of generative AI gave us chatbots. The second wave, now underway, gives us <strong>agents</strong> — systems that understand goals, create plans, use tools, and execute multi-step tasks autonomously under human oversight.</p>
+  <p>Gartner projects that <strong><a class="src" href="https://machinelearningmastery.com/7-agentic-ai-trends-to-watch-in-2026/" target="_blank">40% of enterprise applications will embed AI agents by end of 2026</a></strong>, up from less than 5% in 2025. The agentic market is expected to surge from roughly <a class="src" href="https://machinelearningmastery.com/7-agentic-ai-trends-to-watch-in-2026/" target="_blank">$8 billion today to over $52 billion by 2030</a>. We are moving from instruction-based computing (telling a computer <em>how</em>) to intent-based computing (stating the desired outcome and letting the agent figure out how to deliver it).</p>
+  <p><strong>Business agents</strong> are being deployed for data analysis, content creation, customer support triage, financial reporting, code generation, and multi-step workflow orchestration. <strong>Personal agents</strong> are emerging as voice-first assistants with persistent memory that schedule, research, shop, and manage your digital life continuously rather than in isolated sessions.</p>
+
+  <div class="callout warm">
+    <span class="callout-label">PE Implication</span>
+    <p>For portfolio companies: every SaaS vendor that doesn't embed agentic capabilities in 2026 risks becoming a commodity backend. The companies that own the "front door" to the user's intent will capture disproportionate value.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- MCP -->
+  <h3 id="t-mcp">MCP Servers Connecting Agents</h3>
+  <p>The <strong>Model Context Protocol (MCP)</strong>, introduced by Anthropic, has rapidly become the de facto standard for connecting AI agents to data sources, tools, and other systems. Think of MCP as "USB-C for AI" — a universal plug that lets any agent talk to any enterprise resource through a standardized interface.</p>
+  <p>MCP is rapidly winning the protocol wars. While Google's A2A (Agent-to-Agent) protocol addresses inter-agent communication, analysts note that MCP's ecosystem advantage is decisive. As one industry analyst <a class="src" href="https://www.techtarget.com/searchdatamanagement/feature/4-trends-that-will-shape-data-management-and-AI-in-2026" target="_blank">put it</a>: MCP won't coexist with A2A — it will absorb the useful parts because the market demands one standard, and it won't be the one that arrived second. As MCP adoption expands, managing large numbers of MCP servers within an organization will become an important operational challenge in 2026.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number accent">40%</div>
+      <div class="label">Enterprise apps with agents by end 2026</div>
+      <a class="src" href="https://machinelearningmastery.com/7-agentic-ai-trends-to-watch-in-2026/" target="_blank">Gartner via MLMastery</a>
+    </div>
+    <div class="stat-card">
+      <div class="number warm">$52B</div>
+      <div class="label">Projected agentic AI market by 2030</div>
+      <a class="src" href="https://machinelearningmastery.com/7-agentic-ai-trends-to-watch-in-2026/" target="_blank">MLMastery</a>
+    </div>
+    <div class="stat-card">
+      <div class="number green">14%</div>
+      <div class="label">Orgs with production-ready agent solutions today</div>
+      <a class="src" href="https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html" target="_blank">Deloitte</a>
+    </div>
+    <div class="stat-card">
+      <div class="number cyan">35%</div>
+      <div class="label">Orgs with no formal agent strategy yet</div>
+      <a class="src" href="https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/agentic-ai-strategy.html" target="_blank">Deloitte</a>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Managing AI Costs -->
+  <h3 id="t-costs">Managing AI Costs in an Agentic World</h3>
+  <p>The agentic paradigm introduces a new challenge: <strong>unpredictable, consumption-based costs</strong>. When every workflow involves multiple agent calls, tool invocations, and token processing, budgets become difficult to forecast. A 2025 study found that <a class="src" href="https://www.prnewswire.com/news-releases/2025-state-of-ai-cost-management-research-finds-85-of-companies-miss-ai-forecasts-by-10-302551947.html" target="_blank">80% of enterprises miss their AI infrastructure forecasts by more than 25%, and 84% report margin erosion</a> tied to AI workloads.</p>
+  <p>The key tension: AI-native SaaS spending nearly doubled year-over-year, reaching an average of <a class="src" href="https://zylo.com/blog/ai-cost/" target="_blank">$1.2 million per organization</a>. Token usage, tier shifts, and AI upgrades often inflate costs mid-contract. Shadow AI — employees using expensed AI tools that bypass governance — is expanding both spend and risk.</p>
+  <p><strong>Practical response:</strong> organizations need FinOps for AI, treating AI spend with the same rigor as cloud cost management. This means real-time cost attribution, model routing (using cheaper models for simpler tasks), caching repeated queries, and establishing clear governance over which agents can make which API calls.</p>
+
+  <div class="sep"></div>
+
+  <!-- Trajectory -->
+  <h3 id="t-trajectory">The Trajectory of AI Intelligence and Costs</h3>
+  <p>Two trendlines define this era, and they're moving in opposite directions: <strong>capability is rising exponentially while costs are falling just as fast.</strong></p>
+  <p>According to Stanford's 2025 AI Index, the cost to run AI at GPT-3.5-level performance plummeted from <a class="src" href="https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-costs-drop-280-fold-but-harmful-incidents-rise-56-percent-in-last-year-stanford-2025-ai-report-highlights-china-us-competition" target="_blank">$20 per million tokens to $0.07 per million in just 18 months — a <strong>280x reduction</strong></a>. Hardware costs for AI computation are declining roughly <a class="src" href="https://www.baytechconsulting.com/blog/the-state-of-artificial-intelligence-in-2025" target="_blank">30% annually, and energy efficiency is improving by approximately 40% each year</a>. NVIDIA's Blackwell architecture is delivering a further <a class="src" href="https://www.tldl.io/blog/ai-inference-cost-optimization-2026" target="_blank">4x–10x cost reduction in inference</a> compared to the prior generation.</p>
+  <p>On the capability side, AI benchmark saturation is the new norm. In one year, AI scores improved by <a class="src" href="https://www.baytechconsulting.com/blog/the-state-of-artificial-intelligence-in-2025" target="_blank">49 percentage points on graduate-level reasoning (GPQA) and 67 points on code engineering (SWE-bench)</a>. The gap between U.S. and Chinese frontier models narrowed from <a class="src" href="https://spectrum.ieee.org/ai-index-2025" target="_blank">9.3% to 1.7%</a>. Meanwhile, open-source models from Meta, Mistral, and DeepSeek are now approaching closed-model performance, driving the entire market into a <a class="src" href="https://sumatosoft.com/blog/ai-development-costs" target="_blank">"race to the bottom" on pricing</a>.</p>
+
+  <div class="callout cyan">
+    <span class="callout-label">The core dynamic</span>
+    <p><strong>Intelligence is becoming a commodity.</strong> Training costs are rising dramatically at the frontier (Google's Gemini Ultra reportedly cost <a class="src" href="https://spectrum.ieee.org/ai-index-2025" target="_blank">~$192 million</a>), but the cost to <em>use</em> that intelligence is collapsing. The implication: when intelligence costs approach zero, it becomes embedded everywhere — in every product, every process, every interaction. As Sam Altman has put it, the cost of intelligence will converge with the cost of energy.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Labor Market -->
+  <h3 id="t-labor">Impact on the Labor Market: Fears and Realities</h3>
+  <p>The IMF's Managing Director described AI's labor impact as <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">arriving "like a tsunami,"</a> while employee concerns about AI-related job loss have jumped from <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">28% in 2024 to 40% in 2026 (Mercer)</a>. The headlines are alarming. But the reality is more nuanced.</p>
+  <p>Research from the Federal Reserve Bank of Dallas reveals the clearest pattern: <strong>AI is simultaneously aiding and replacing workers.</strong> The key distinction is between <a class="src" href="https://www.dallasfed.org/research/economics/2026/0224" target="_blank">codifiable knowledge (textbook knowledge AI can replicate) and tacit knowledge (experiential knowledge it cannot)</a>. AI is automating jobs that rely on codifiable skills while augmenting jobs that demand experienced judgment.</p>
+  <p>The data shows a <strong><a class="src" href="https://www.dallasfed.org/research/economics/2026/0106" target="_blank">16% relative decline in employment for recent graduates in AI-exposed roles</a></strong>, while experienced workers in those same fields see rising wages. Entry-level hiring is getting harder, but layoffs among experienced workers remain relatively flat. Wages in computer systems design have grown <a class="src" href="https://www.dallasfed.org/research/economics/2026/0224" target="_blank">16.7% since ChatGPT's debut</a> — more than double the national average — because AI augments the value of experienced practitioners.</p>
+  <p>However, some analysts warn about <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">"AI redundancy washing"</a> — companies attributing layoffs to AI that are actually driven by broader economic uncertainty. Yale's Budget Lab found that AI hasn't yet caused the massive job-share shifts many predicted.</p>
+
+  <div class="callout rose">
+    <span class="callout-label">The honest take</span>
+    <p>The labor market impact is real but uneven. <strong>Entry-level knowledge work is being compressed.</strong> Mid-career workers with deep domain expertise are being amplified. The "great adaptation" of 2026 is less about mass unemployment and more about a fundamental reshuffling of who does what work, and how much of it requires a human in the loop.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Builders & Creators -->
+  <h3 id="t-builders">AI Empowers Builders and Creators</h3>
+  <p>There is a flip side to the labor market anxiety — and it may be the most transformative trend of all. <strong>AI has demolished the barriers between having an idea and building it.</strong> For the first time in history, a motivated individual with no formal engineering training can create functional software, produce cinematic video, generate professional imagery, and ship a product — in hours, not months.</p>
+
+  <h4>The vibe coding revolution</h4>
+  <p>The term <a class="src" href="https://www.shareuhack.com/en/posts/vibe-coding-guide-2026" target="_blank">"vibe coding" was coined by AI pioneer Andrej Karpathy in 2025</a> to describe a new paradigm: you describe what you want in natural language, and AI generates the code. An explosion of tools has made this accessible to everyone:</p>
+  <p><strong><a class="src" href="https://lovable.dev/guides/best-vibe-coding-tools-2026-build-apps-chatting" target="_blank">Claude Code</a></strong> — Anthropic's command-line agent for developers, achieving a 93% benchmark success rate on complex multi-file coding tasks. <strong><a class="src" href="https://lovable.dev/guides/best-vibe-coding-tools-2026-build-apps-chatting" target="_blank">Lovable</a></strong> — described as a "superhuman full-stack engineer," it lets non-technical founders go from idea to deployed app with Stripe payments in a single day; it has reached $300M ARR. <strong><a class="src" href="https://replit.com/discover/best-vibe-coding-tools" target="_blank">Replit</a></strong> — a complete cloud IDE where anyone can describe, build, and deploy applications in any language from their browser. <strong><a class="src" href="https://emergent.sh/learn/best-vibe-coding-tools" target="_blank">Bolt.new</a></strong> — generates production-ready full-stack apps in 3–7 minutes from a prompt, running entirely in the browser. <strong><a class="src" href="https://replit.com/discover/best-vibe-coding-tools" target="_blank">Cursor</a></strong> and <strong>Windsurf</strong> — AI-native IDEs that give experienced developers superpowers, turning intent into production code. <strong>Abacus AI</strong>, <strong>v0 by Vercel</strong>, <strong>Base44</strong>, and dozens more are filling every niche from React components to enterprise platforms.</p>
+  <p>The <a class="src" href="https://vibecoding.app/blog/best-vibe-coding-tools" target="_blank">graduation path</a> is now clear: prototype in Lovable or Bolt (zero coding required), graduate to Cursor or Claude Code for production-quality work, then bring in professional engineers only when you need to scale. What used to require a $500K seed round and a team of five now requires a $25/month subscription and a weekend.</p>
+
+  <h4>Creative tools: video, image, audio, design</h4>
+  <p>The same democratization is happening across every creative medium. <a class="src" href="https://zapier.com/blog/best-ai-video-generator/" target="_blank">Google's Veo 3.1</a> generates realistic video scenes with matched sound from text prompts. <a class="src" href="https://zapier.com/blog/best-ai-video-generator/" target="_blank">Runway's Gen-4.5</a> gives creators cinematic control over camera choreography and scored highest in blind preference tests. <strong>OpenAI's Sora</strong> produces narrative-coherent videos up to a minute long. <strong>Midjourney</strong> and <strong>DALL-E</strong> generate studio-quality imagery. <strong>ElevenLabs</strong> creates human-like voiceovers. <strong>Suno</strong> and <strong>Udio</strong> compose original music. <strong>Canva Magic Studio</strong> turns anyone into a graphic designer.</p>
+  <p>The combined effect is staggering: a single person can now conceive, design, build, test, and market a digital product — software, content, media — with tools that cost less per month than a single business lunch. <a class="src" href="https://www.heygen.com/blog/ai-video-generators-transforming-video-production-2026" target="_blank">AI video tools are cutting production costs by up to 70%</a>. The barriers that once separated "people with ideas" from "people who ship products" are evaporating.</p>
+
+  <div class="callout warm">
+    <span class="callout-label">The real prerequisite</span>
+    <p>The scarce resource is no longer capital, credentials, or technical skill. It is <strong>motivation, creativity, resourcefulness, time, and energy.</strong> A time-rich, motivated individual with a clear problem to solve can now outpace a capital-rich corporation that is slow, bureaucratic, and encumbered by legacy processes. The person who spends a focused weekend with Claude Code and Lovable can build and ship what would have taken a well-funded team weeks. This is the great equalizer: AI doesn't just augment existing power structures — it <em>inverts</em> them in favor of the resourceful, the relentless, and the creative. The implication for PE portfolio companies is profound: your biggest competitive threat may no longer be a well-funded rival, but a scrappy founder with a laptop and AI tools who moves ten times faster than your organization can.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Consumers -->
+  <h3 id="t-consumers">Impact on Consumers: The Era of Abundance</h3>
+  <p>For consumers, AI is inaugurating an age of unprecedented abundance. When intelligence becomes cheap and ubiquitous, the cost of personalized services collapses. Consider what is already happening:</p>
+  <p><strong>Personalized education</strong> — AI tutors that adapt to each student's learning style, available 24/7, at near-zero marginal cost. <strong>Personalized health guidance</strong> — AI models analyzing your data to offer bespoke nutrition, fitness, and early-warning health screening. <strong>Personalized content</strong> — custom video, music, stories, and media generated to individual taste. <strong>Personalized legal and financial advice</strong> — services previously restricted to the wealthy become accessible to everyone.</p>
+  <p>The analogy to previous technology revolutions is instructive. GPS went from a $3,000 military device to a free smartphone feature, creating entirely new industries (ride-sharing, food delivery, location marketing). When the cost of intelligence follows the same trajectory, every service that currently requires human expertise becomes a candidate for mass democratization.</p>
+  <p>The counterbalance: <strong>attention and trust become scarce resources</strong> in a world of infinite AI-generated content. The ability to discern quality, authenticity, and alignment with one's values becomes the new premium skill for consumers.</p>
+
+  <div class="sep"></div>
+
+  <!-- Science -->
+  <h3 id="t-science">Impact on Sciences: Math, Physics, Biology, New Discoveries</h3>
+  <p>AI is reshaping the scientific method itself. The 2024 Nobel Prizes in Chemistry and Physics were both awarded to AI pioneers, signaling that the scientific establishment now recognizes AI as a first-class tool of discovery.</p>
+  <p><strong>In biology,</strong> AlphaFold has revolutionized structural prediction, and the frontier is moving up the biological stack — from molecules to cells to tissues to multi-organ systems. <a class="src" href="https://research.google/blog/google-research-2025-bolder-breakthroughs-bigger-impact/" target="_blank">Google's AI co-scientist</a>, a multi-agent system, has generated hypotheses that matched experimental results that took human teams years to develop — in just days. It proposed drug candidates for liver fibrosis that were validated in the lab, and predicted antimicrobial resistance mechanisms before they were published.</p>
+  <p><strong>In physics and math,</strong> AI is being used to discover new symmetries, guide proofs of complex theorems, and process the <a class="src" href="https://www.cmu.edu/news/stories/archives/2025/september/ais-role-in-the-future-of-discovery" target="_blank">40 million 3D images produced per second by CERN's particle collider</a>. Researchers at Vanderbilt <a class="src" href="https://www.sciencenews.org/article/ai-enabled-science-discovery-insight" target="_blank">discovered new symmetries in black hole equations</a> by working alongside AI reasoning models. A Japanese team used deep-learning surrogates to simulate <a class="src" href="https://en.wikipedia.org/wiki/2025_in_science" target="_blank">over 100 billion individual stars in the Milky Way, running 100x faster</a> than previous methods.</p>
+  <p><strong>In chemistry and materials science,</strong> AI-designed coolants, new drug compounds, and novel materials are moving from simulation to laboratory validation. At Stanford, climate modelers sent longer-range monsoon forecasts to <a class="src" href="https://research.google/blog/google-research-2025-bolder-breakthroughs-bigger-impact/" target="_blank">38 million Indian farmers using Google's NeuralGCM model</a>.</p>
+
+  <div class="callout green">
+    <span class="callout-label">The key insight</span>
+    <p>AI isn't replacing scientists — it's giving them, in the words of one researcher, "superpowers." The biggest breakthroughs will come not from AI acting alone but from <strong>human-AI collaboration</strong> where the human provides "research taste" (the ability to ask the right questions) while AI handles hypothesis generation, data analysis, and experimental optimization at superhuman speed. DeepMind's Hassabis <a class="src" href="https://www.sciencenews.org/article/ai-enabled-science-discovery-insight" target="_blank">estimates we are five to ten years</a> from AI systems that can independently generate truly novel hypotheses.</p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Health -->
+  <h3 id="t-health">Impact on Health and Longevity</h3>
+  <p>The longevity field has shifted from fringe science to boardroom strategy. Longevity-focused startups attracted <a class="src" href="https://clarivate.com/life-sciences-healthcare/blog/why-longevity-might-be-biopharmas-next-big-thing/" target="_blank">$8.5 billion in venture capital in 2024</a>, more than doubling from the prior year. The broader longevity market is projected to reach <a class="src" href="https://clarivate.com/life-sciences-healthcare/blog/why-longevity-might-be-biopharmas-next-big-thing/" target="_blank">$8 trillion by 2030</a>.</p>
+  <p>Several drug candidates discovered and optimized by AI are now entering <a class="src" href="https://www.crescendo.ai/news/latest-ai-news-and-updates" target="_blank">mid-to-late-stage clinical trials in 2026</a>, primarily in oncology and rare diseases. <a class="src" href="https://longevity.technology/news/ais-role-in-the-next-era-of-longevity-biotech/" target="_blank">Insilico Medicine's AI platform</a> has compressed the timeline from target discovery to preclinical candidate from the traditional 4–5 years to under 18 months. At Scripps Research, an AI model identified anti-aging drugs that <a class="src" href="https://www.scripps.edu/news-and-events/press-room/2025/20250529-petrascheck-ai-anti-aging.html" target="_blank">extended lifespan in organisms by up to 74%</a>.</p>
+  <p>The big pharma world is following. <strong>Novartis</strong> launched an entire <a class="src" href="https://clarivate.com/life-sciences-healthcare/blog/why-longevity-might-be-biopharmas-next-big-thing/" target="_blank">Diseases of Aging division</a>. <strong>Eli Lilly</strong> launched <a class="src" href="https://www.drugdiscoveryonline.com/doc/ai-meets-aging-inside-the-longevity-revolution-with-insilico-medicine-part-i-0001" target="_blank">TuneLab, an AI/ML platform built on over $1 billion in proprietary data</a>. <a class="src" href="https://www.labiotech.eu/best-biotech/anti-aging-biotech-companies/" target="_blank">ARPA-H has funded seven U.S. research teams</a> to develop therapies that extend healthspan. Senolytics (drugs that clear damaged "zombie" cells) have <a class="src" href="https://clarivate.com/life-sciences-healthcare/blog/why-longevity-might-be-biopharmas-next-big-thing/" target="_blank">entered human testing</a>. Epigenetic reprogramming — literally reversing cellular aging — is approaching the clinic.</p>
+  <p>Meanwhile, AI is transforming diagnostics. Models trained on chest X-rays can detect <a class="src" href="https://www.crescendo.ai/news/latest-ai-news-and-updates" target="_blank">early signs of biological aging invisible to the human eye</a>. Full-body MRI screening combined with AI analysis is creating "data rooms" for each patient, catching problems years before they become deadly. A landmark clinical trial published in 2025 found that <a class="src" href="https://en.wikipedia.org/wiki/2025_in_science" target="_blank">vitamin D supplements can reduce biological aging, potentially adding three years to lifespan</a> — a finding surfaced through analysis of existing data.</p>
+
+  <div class="sep"></div>
+
+  <!-- Robotics -->
+  <h3 id="t-robots">The Robotics Revolution</h3>
+  <p>At CES 2026, humanoid robots dominated the show floor. NVIDIA's Jensen Huang declared the humanoid industry is <a class="src" href="https://blog.robozaps.com/b/future-of-humanoid-robots" target="_blank">"riding on the work of the AI factories we're building."</a> Google DeepMind announced a <a class="src" href="https://www.therobotreport.com/top-10-robotics-developments-of-january-2026/" target="_blank">partnership with Boston Dynamics</a> to integrate Gemini Robotics AI into the Atlas robot. The global industrial robot market has reached a record <a class="src" href="https://ifr.org/ifr-press-releases/news/top-5-global-robotics-trends-2026" target="_blank">$16.7 billion</a>.</p>
+  <p>The convergence that changed everything: large language models + vision-language-action models + improved actuators. Robots can now understand natural language instructions, perceive complex environments, and learn new tasks by watching human demonstrations. Boston Dynamics' production-ready Electric Atlas features <a class="src" href="https://interestingengineering.com/ai-robotics/9-humanoid-robots-at-ces-2026" target="_blank">56 degrees of freedom, a 7.5-foot reach</a>, and will deploy at Hyundai's factory in Georgia this year.</p>
+  <p>The humanoid market, valued at about <a class="src" href="https://blog.robozaps.com/b/future-of-humanoid-robots" target="_blank">$1.8 billion in 2023, is projected to reach $13.8 billion by 2028</a> (over 50% CAGR). Morgan Stanley's long-range forecast envisions <a class="src" href="https://blog.robozaps.com/b/future-of-humanoid-robots" target="_blank">$5 trillion by 2050</a>. Chinese manufacturers are making an aggressive state-backed push, with companies like UBTech already <a class="src" href="https://interestingengineering.com/ai-robotics/science-fiction-become-reality-in-2026" target="_blank">shipping over 1,000 units</a>. <a class="src" href="https://humanoidroboticstechnology.com/articles/top-12-humanoid-robots-of-2026/" target="_blank">1X Technologies has opened preorders for NEO</a>, with first home deliveries in 2026.</p>
+  <p>For enterprises, the near-term story is <strong>"brownfield" deployment</strong> — humanoid robots designed to work in environments originally built for humans (warehouses, factories, hospitals), requiring no infrastructure changes. At BMW, <a class="src" href="https://www.articsledge.com/post/ai-humanoid-robots" target="_blank">Figure 02 inserts sheet-metal parts with millimeter precision</a>. At GXO's logistics centers, robots handle repetitive warehouse tasks alongside human workers.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number accent">$16.7B</div>
+      <div class="label">Global industrial robot market (record, 2025)</div>
+      <a class="src" href="https://ifr.org/ifr-press-releases/news/top-5-global-robotics-trends-2026" target="_blank">Intl. Federation of Robotics</a>
+    </div>
+    <div class="stat-card">
+      <div class="number warm">50%+</div>
+      <div class="label">Humanoid market CAGR through 2028</div>
+      <a class="src" href="https://blog.robozaps.com/b/future-of-humanoid-robots" target="_blank">MarketsandMarkets</a>
+    </div>
+    <div class="stat-card">
+      <div class="number green">56</div>
+      <div class="label">Degrees of freedom in Boston Dynamics' Atlas</div>
+      <a class="src" href="https://interestingengineering.com/ai-robotics/9-humanoid-robots-at-ces-2026" target="_blank">Interesting Engineering</a>
+    </div>
+    <div class="stat-card">
+      <div class="number cyan">$25K</div>
+      <div class="label">EngineAI T800 starting price (shipping mid-2026)</div>
+      <a class="src" href="https://interestingengineering.com/ai-robotics/9-humanoid-robots-at-ces-2026" target="_blank">Interesting Engineering</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 3: SaaS Impact ─── -->
+<section id="saas">
+<div class="container">
+  <span class="section-number">03 — Software Disruption</span>
+  <h2>How Does AI Affect Software Companies?<br>Is This the End of SaaS?</h2>
+
+  <p>In December 2024, Satya Nadella declared: <a class="src" href="https://www.idc.com/resource-center/blog/is-saas-dead-rethinking-the-future-of-software-in-the-age-of-ai/" target="_blank">"SaaS is dead."</a> Eighteen months later, the market has aggressively priced that thesis. The SaaS index <a class="src" href="https://www.calcalistech.com/ctechnews/article/hjlvyl7lze" target="_blank">underperformed the S&P 500 by over 24 percentage points in 2025</a>. In early 2026, a "Black February" sell-off wiped more than <strong><a class="src" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-2-24-the-1-trillion-software-carnage-how-ai-agents-broke-the-saas-model" target="_blank">$1 trillion in market capitalization</a></strong> from software companies. SAP lost <a class="src" href="https://xpert.digital/en/the-big-reckoning" target="_blank">~$130 billion in market value</a>. Salesforce stock declined <a class="src" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-2-24-the-1-trillion-software-carnage-how-ai-agents-broke-the-saas-model" target="_blank">38% year-to-date</a>. The SaaS index dropped while NASDAQ surged.</p>
+
+  <p>The core disruption: <strong>AI agents invert the user-software relationship.</strong> Instead of humans navigating dozens of specialized applications, agents orchestrate workflows across systems, generating insights and taking actions without requiring direct software interaction. When one user equipped with AI agents can do the work of five, per-seat pricing — the economic engine of SaaS for two decades — collapses.</p>
+
+  <h4>What's actually breaking</h4>
+  <p>Companies are reducing software seats as AI-enhanced workers accomplish more with fewer licenses. The average number of SaaS applications per organization <a class="src" href="https://xpert.digital/en/the-big-reckoning" target="_blank">decreased from 112 to 106, with 82% of organizations actively reducing their vendor count</a>. Enterprises are beginning to "vibe code" internal tools or use AI to replace purchased SaaS products. Gartner predicts <a class="src" href="https://intellectia.ai/blog/will-ai-disrupt-saas-business-model-2026" target="_blank">35% of point-product SaaS tools will be replaced by AI agents by 2030</a>.</p>
+
+  <h4>What survives</h4>
+  <p>SaaS is not dead — it is metamorphosing. IDC predicts that by 2028, <a class="src" href="https://www.idc.com/resource-center/blog/is-saas-dead-rethinking-the-future-of-software-in-the-age-of-ai/" target="_blank">pure seat-based pricing will be obsolete, with 70% of vendors shifting</a> to consumption, outcome, or capability-based models. Differentiated platforms with deep data moats, network effects, and regulatory compliance will emerge stronger. ERP and CRM systems in which organizations have invested hundreds of millions won't be discarded overnight. Infrastructure providers — cloud platforms, data layers, GPU manufacturers — are being supercharged, not disrupted.</p>
+
+  <div class="callout warm">
+    <span class="callout-label">For PE investors</span>
+    <p>The <a class="src" href="https://www.bain.com/insights/will-agentic-ai-disrupt-saas-technology-report-2025/" target="_blank">Bain framework</a> is useful: categorize each portfolio company's workflows into four quadrants based on user automation potential and AI penetration potential. Workflows where AI can both automate users <em>and</em> easily penetrate are "battlegrounds" — act immediately. Workflows with high automation potential but low AI penetration are "growth gold mines" — build end-to-end agents and shift to outcome-based pricing. The companies that remain tethered to a per-seat model by end of 2026 likely face terminal decline. Between <a class="src" href="https://xpert.digital/en/the-big-reckoning" target="_blank">20–35% of private credit deals involving SaaS</a> are now considered threatened by AI disruption.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 4: Jobs ─── -->
+<section id="jobs">
+<div class="container">
+  <span class="section-number">04 — The Workforce Question</span>
+  <h2>Will People Be Replaced?<br>What Will Happen to Jobs?</h2>
+
+  <p>This is the question everyone asks. The honest answer: <strong>some jobs will be eliminated, many will be transformed, and new ones will be created</strong> — but the transition will be painful and uneven.</p>
+
+  <h4>What the data actually shows</h4>
+  <p>The <a class="src" href="https://www.nexford.edu/insights/how-will-ai-affect-jobs" target="_blank">World Economic Forum estimated that AI could displace roughly 85 million jobs</a> globally by 2026. <a class="src" href="https://locusrobotics.com/blog/workforce-predictions-ai" target="_blank">Goldman Sachs estimates 6–7% of the U.S. workforce could be displaced</a> if AI is widely adopted. But so far, the aggregate impact has been modest. <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">Yale's Budget Lab</a> found that job-share shifts since ChatGPT's debut have been relatively small. The unemployment rate has remained around the 4% mark.</p>
+  <p>The pattern is clearer when you look at <em>who</em> is affected. As the <a class="src" href="https://www.dallasfed.org/research/economics/2026/0224" target="_blank">Dallas Fed research</a> demonstrates: the job market is getting very tough for new graduates in AI-exposed fields (a <a class="src" href="https://www.dallasfed.org/research/economics/2026/0106" target="_blank">16% relative employment decline</a> for under-25s in high AI-exposure occupations), but experienced workers' wages are rising. The reason: AI automates codifiable knowledge but complements tacit, experiential knowledge.</p>
+
+  <h4>The emerging landscape</h4>
+  <p>New roles are appearing: AI governance, prompt engineering, AI safety, agent orchestration, data management for AI systems. The companies that provide AI education to employees are winning investment favor — <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">97% of investors in a Mercer survey</a> said funding decisions would be negatively impacted by firms that fail to systematically upskill workers on AI.</p>
+  <p>What's most concerning is the psychological toll. Mercer's 2026 Global Talent Trends report found that <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">62% of employees feel leaders underestimate AI's emotional impact</a>. Anxiety about AI is rising from "a low hum to a loud roar." This is a management challenge as much as a technical one.</p>
+
+  <div class="callout">
+    <span class="callout-label">Framework for thinking about it</span>
+    <p>Don't ask "Will AI replace me?" Ask: <strong>"Which of my tasks can AI do better, and which require my judgment, relationships, and experience?"</strong> Then ruthlessly offload the former and deepen the latter. The people who thrive will be those who treat AI as a force multiplier for their irreplaceable human skills — not those who try to outcompete AI at tasks AI was designed to do.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 5: ICs & Team Leads ─── -->
+<section id="ics">
+<div class="container">
+  <span class="section-number">05 — Individual Contributors & Team Leads</span>
+  <h2>What Are the Effects of AI<br>on ICs and Team Leads?</h2>
+
+  <h4>The IC's world is changing fastest</h4>
+  <p>Individual contributors — software engineers, analysts, designers, content creators, researchers — are the roles most directly impacted by AI augmentation. A single IC equipped with AI tools can now produce output that previously required a small team. Code generation, data analysis, report writing, design iteration, customer communication — all are being accelerated 3–10x by AI pair-working.</p>
+  <p>This creates a paradox: <strong>the best ICs become dramatically more valuable, while average ICs become more replaceable.</strong> The skill premium shifts from raw execution speed to judgment, taste, and the ability to direct AI effectively. The question is no longer "How fast can you write code?" but "Can you architect the right system, identify the right problem, and review AI-generated output for correctness?"</p>
+
+  <h4>The team lead's new mandate</h4>
+  <p>Team leads and managers face a different challenge. Their traditional role — breaking work into tasks, assigning those tasks to humans, reviewing output, and managing team dynamics — is being reshaped. In an AI-augmented team:</p>
+  <p><strong>Smaller teams do more.</strong> The optimal team size shrinks when each member is AI-augmented. Leads must manage fewer people but more agents and AI workflows. <strong>Quality assurance intensifies.</strong> AI-generated work is faster but not always correct. The lead's role as a quality gate and strategic thinker becomes more important, not less. <strong>Mentorship changes.</strong> Junior developers have fewer "reps" on basic tasks (AI handles them). Leads must find new ways to build junior talent's judgment and domain knowledge. <strong>The "AI champion" role emerges.</strong> Forward-looking companies are designating AI enablement leaders within teams — people who help the team adopt AI tools safely and effectively.</p>
+
+  <div class="callout cyan">
+    <span class="callout-label">The bottom line</span>
+    <p>ICs should invest in <strong>problem selection, system thinking, and AI fluency</strong> — the ability to direct and evaluate AI output. Team leads should invest in <strong>workflow redesign, agent orchestration, and human development</strong> — skills that complement, rather than compete with, AI capabilities. The question for every professional in 2026 is no longer "How do I do this?" but "Where will I choose to focus my uniquely human effort?"</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 6: Building Agents ─── -->
+<section id="agents-how">
+<div class="container">
+  <span class="section-number">06 — Practical Guidance</span>
+  <h2>How Do You Approach Creating Agents<br>and Using AI to Replace the Redundant?</h2>
+
+  <p>The organizations succeeding with agentic AI in 2026 are not those throwing agents at every problem. They're the ones doing deliberate, process-first transformation.</p>
+
+  <h4>Step 1: Map your workflows, not your tech stack</h4>
+  <p>Before building any agent, deeply understand the actual work being done. What are the steps? Where are the bottlenecks? What requires human judgment versus what is rule-following? Many failed AI implementations start with "we want to integrate AI" rather than "we have a specific workflow that costs X, takes Y time, and has Z error rate — and we want to improve those numbers."</p>
+
+  <h4>Step 2: Identify automation candidates using a structured framework</h4>
+  <p>Evaluate each workflow against six dimensions: task structure and repetition, risk of error, contextual knowledge dependency, data availability, process variability, and human interface dependency. Workflows that are highly structured, data-rich, and low-variability are ripe for full agent automation. Those requiring judgment, relationship management, or creative problem-solving are candidates for augmentation, not replacement.</p>
+
+  <h4>Step 3: Start with single agents, then orchestrate</h4>
+  <p>The proven pattern is to start with single-agent systems using well-established design patterns (ReAct, Tool Use, Human-in-the-Loop). Prove value on one workflow. Then expand to multi-agent orchestration for end-to-end process automation. The key design patterns include: sequential workflows, parallel task execution, reflection loops (where agents evaluate their own output), and planning agents that decompose complex goals into sub-tasks.</p>
+
+  <h4>Step 4: Connect agents via MCP</h4>
+  <p>Use MCP to give agents standardized access to your data sources, business systems, and tools. This avoids brittle point-to-point integrations and creates a composable infrastructure where new agents can be deployed quickly. The investment in MCP infrastructure pays dividends as the number of agents grows.</p>
+
+  <h4>Step 5: Govern ruthlessly</h4>
+  <p>Every agent needs: clear scope boundaries (what it's allowed to do and not do), human-in-the-loop checkpoints for high-stakes decisions, audit trails for every action taken, cost monitoring and circuit breakers, and regular performance evaluation against defined metrics.</p>
+
+  <div class="callout green">
+    <span class="callout-label">The mindset shift</span>
+    <p>Don't think of this as "replacing people with AI." Think of it as <strong>"redesigning processes for an AI-first world."</strong> The most impactful transformations come not from automating existing workflows one-for-one, but from reimagining what's possible when intelligence is abundant and cheap. A process that made sense when it took a human 4 hours might be completely redesigned when an agent can do preliminary work in 4 minutes. The goal is not to make the same process faster — it's to design a fundamentally better process.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 7: Outlook ─── -->
+<section id="outlook">
+<div class="container">
+  <span class="section-number">07 — The Big Picture</span>
+  <h2>What to Do About AI's Impact?<br>How to Think About It?</h2>
+
+  <p>After 25 years in AI and technology, here is how I'd frame the current moment.</p>
+
+  <h4>This is not hype. This is not a bubble. This is a phase transition.</h4>
+  <p>Previous technology revolutions — the printing press, electrification, the internet — each took decades to fully reshape society, but each was also <strong>irreversible from very early on.</strong> AI is following this pattern. The technology works. The economics work. The adoption curve is steeper than anything we've seen before. There is no scenario in which we go back to a pre-AI world.</p>
+
+  <h4>The case for optimism</h4>
+  <p>AI is enabling scientific breakthroughs that were previously impossible. Drug discovery timelines are compressing from years to months. Climate models are becoming accurate enough to help 38 million farmers. Students everywhere will have access to tutoring that was previously reserved for the privileged few. The democratization of intelligence is, in principle, the most egalitarian force in human history.</p>
+  <p>For businesses, AI represents the biggest productivity unlock since the computer. <a class="src" href="https://www.nexford.edu/insights/how-will-ai-affect-jobs" target="_blank">McKinsey projects $13 trillion in additional global economic activity by 2030</a>. Companies that learn to wield AI effectively will create enormous value — for shareholders, for customers, and for the workers whose capabilities are amplified.</p>
+
+  <h4>The case for caution</h4>
+  <p>Transition costs are real. The labor market disruption, while not apocalyptic, is creating genuine anxiety and hardship — particularly for early-career workers. The concentration of AI capability among a small number of companies raises questions about power, competition, and access. AI systems can be wrong in confident, convincing ways. And the pace of change itself is a source of stress and disorientation.</p>
+
+  <h4>The practical path forward</h4>
+  <p>For companies, the imperative is clear: <strong>treat AI adoption as a strategic priority, not an IT project.</strong> Invest in workflow redesign, not just tool procurement. Upskill your workforce aggressively — not because it's generous, but because the <a class="src" href="https://www.cnbc.com/2026/01/20/ai-impacting-labor-market-like-a-tsunami-as-layoff-fears-mount.html" target="_blank">97% of investors who penalize companies that fail to upskill</a> are telling you the market demands it.</p>
+  <p>For individuals, the imperative is equally clear: <strong>become fluent in AI.</strong> Not to become a machine learning engineer, but to understand what AI can and can't do, and to learn how to direct it effectively. The people who thrive in the next decade will be those who learn to be "above the API" — the ones who set the goals, define the problems, and exercise judgment — rather than "below the API" doing work that AI can do faster and cheaper.</p>
+
+  <div class="callout">
+    <span class="callout-label">Final thought</span>
+    <p><strong>The question isn't whether AI's impact is positive or negative — it's both, simultaneously, and in different measures for different people.</strong> The right frame isn't optimism or pessimism but <em>agency</em>: what can you do, right now, to ensure that you, your company, and your portfolio are on the winning side of this transition? The organizations that move deliberately but urgently — mapping their workflows, deploying agents where they create value, upskilling their people, and redesigning their business models — will thrive. Those that wait for clarity will find that clarity arrived too late.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number accent">280×</div>
+      <div class="label">Reduction in AI inference cost in 18 months</div>
+      <a class="src" href="https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-costs-drop-280-fold-but-harmful-incidents-rise-56-percent-in-last-year-stanford-2025-ai-report-highlights-china-us-competition" target="_blank">Stanford AI Index 2025</a>
+    </div>
+    <div class="stat-card">
+      <div class="number warm">$13T</div>
+      <div class="label">Projected additional global GDP from AI by 2030</div>
+      <a class="src" href="https://www.nexford.edu/insights/how-will-ai-affect-jobs" target="_blank">McKinsey Global Institute</a>
+    </div>
+    <div class="stat-card">
+      <div class="number green">$8T</div>
+      <div class="label">Longevity market projection by 2030</div>
+      <a class="src" href="https://clarivate.com/life-sciences-healthcare/blog/why-longevity-might-be-biopharmas-next-big-thing/" target="_blank">Clarivate</a>
+    </div>
+    <div class="stat-card">
+      <div class="number rose">$1T+</div>
+      <div class="label">SaaS market cap wiped in early 2026</div>
+      <a class="src" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-2-24-the-1-trillion-software-carnage-how-ai-agents-broke-the-saas-model" target="_blank">Financial Content</a>
+    </div>
+  </div>
+</div>
+</section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="footer">
+  <div class="logo-text">AI Intelligence Briefing</div>
+  <p>Prepared by Kosmas Karadimitriou · AI Tech Leader · March 2026</p>
+  <p style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--border);">Sources include Stanford AI Index 2025, Deloitte Tech Trends 2026, Dallas Fed, Gartner, Bain &amp; Company, IDC, McKinsey, Mercer, IFR, and primary industry reporting.</p>
+</div>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+// Sticky nav active state
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.toc a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Fade-in on scroll
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.callout, .stat-grid, .timeline, h3, h4').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  fadeObserver.observe(el);
+});
+</script>
+
+</body>
+</html>
