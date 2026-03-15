@@ -407,8 +407,8 @@
   <a href="#capabilities">Capabilities</a>
   <a href="#building-blocks">Building Blocks</a>
   <a href="#toolkit">Tools & Frameworks</a>
-  <a href="#opportunities">Opportunities</a>
   <a href="#ideation">Ideation</a>
+  <a href="#opportunities">Examples</a>
   <a href="#great-projects">Great Projects</a>
   <a href="#closing">Go Build</a>
 </nav>
@@ -480,7 +480,7 @@
   </div>
 
   <h4>The economics are staggering</h4>
-  <p>The <a class="src" href="https://hai.stanford.edu/ai-index/2025-ai-index-report" target="_blank">Stanford AI Index 2025</a> reports that the cost to query an AI model at GPT-3.5 quality dropped from <strong>$20 per million tokens to $0.07</strong> — a 280-fold reduction in 18 months. Meanwhile, frontier models like GPT-4o, Claude Opus, and Gemini have pushed capabilities far beyond what GPT-3.5 could do, adding reasoning, vision, tool use, and code execution. The result: what cost thousands of dollars to prototype in 2023 now costs cents.</p>
+  <p>The <a class="src" href="https://hai.stanford.edu/ai-index/2025-ai-index-report" target="_blank">Stanford AI Index 2025</a> reports that the cost to query an AI model at GPT-3.5 quality dropped from <strong>$20 per million tokens to $0.07</strong> — a 280-fold reduction in 18 months. Meanwhile, frontier models like GPT-5.4, Claude Opus 4.6, and Gemini 3.1 Pro have pushed capabilities far beyond what GPT-3.5 could do, adding reasoning, vision, tool use, and code execution. The result: what cost thousands of dollars to prototype in 2023 now costs cents.</p>
 
   <p>Organizational AI adoption climbed from 55% in 2023 to 78% in 2024. U.S. private AI investment reached $109.1 billion. The AI agent market alone grew from $5.4 billion in 2024 to a projected <a class="src" href="https://www.demandsage.com/ai-agents-statistics/" target="_blank">$10.9 billion in 2026</a>, and is forecast to exceed $50 billion by 2030.</p>
 </div>
@@ -519,7 +519,7 @@
   </div>
 
   <h4>The models available today</h4>
-  <p>The leading frontier models — <a class="src" href="https://openai.com" target="_blank">OpenAI's GPT-4o</a>, <a class="src" href="https://www.anthropic.com" target="_blank">Anthropic's Claude</a>, and <a class="src" href="https://deepmind.google/technologies/gemini/" target="_blank">Google's Gemini</a> — all support text, images, documents, and tool calling out of the box. Open-source alternatives like <a class="src" href="https://llama.meta.com" target="_blank">Meta's Llama</a> and <a class="src" href="https://mistral.ai" target="_blank">Mistral</a> offer strong capabilities you can run on your own infrastructure. For hackathon purposes, the fastest path is typically an API call to a frontier model — you can have a working AI feature in minutes, not days.</p>
+  <p>The leading frontier models — <a class="src" href="https://openai.com" target="_blank">OpenAI's GPT-5.4</a>, <a class="src" href="https://www.anthropic.com" target="_blank">Anthropic's Claude Opus 4.6</a>, and <a class="src" href="https://deepmind.google/technologies/gemini/" target="_blank">Google's Gemini 3.1 Pro</a> — all support text, images, documents, and tool calling out of the box. Open-source alternatives like <a class="src" href="https://llama.meta.com" target="_blank">Meta's Llama</a> and <a class="src" href="https://mistral.ai" target="_blank">Mistral</a> offer strong capabilities you can run on your own infrastructure. For hackathon purposes, the fastest path is typically an API call to a frontier model — you can have a working AI feature in minutes, not days.</p>
 
   <p>Each of these models can read a 100-page document, analyze an image, write working code, summarize a conversation thread, or classify a support ticket — all through a single API call. The barrier to entry has never been lower.</p>
 </div>
@@ -531,7 +531,7 @@
   <span class="section-number">04 — Architecture Patterns</span>
   <h2>Practical AI Building Blocks</h2>
 
-  <p>Modern AI applications follow a small number of well-established architecture patterns. Understanding these patterns is the fastest way to go from "what should we build?" to "here's how we build it." These are the three patterns you'll use most during the hackathon.</p>
+  <p>Modern AI applications follow a small number of well-established architecture patterns. Understanding these patterns is the fastest way to go from "what should we build?" to "here's how we build it." These are the four patterns you'll use most during the hackathon.</p>
 
   <div class="sub-topics">
     <a class="sub-topic-pill" href="#p-simple">Simple AI Feature</a>
@@ -592,7 +592,7 @@
     Any AI Agent → MCP Protocol → MCP Server → Any Tool, Database, or API
   </div>
 
-  <p>The three patterns above all share a dependency: AI must connect to external systems to be useful. Before 2024, each connection required custom code — a bespoke integration for every tool and every AI app. The <a class="src" href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol (MCP)</a>, introduced by <a class="src" href="https://www.anthropic.com/news/model-context-protocol" target="_blank">Anthropic in November 2024</a>, solves this with an open standard that works like <strong>USB-C for AI</strong>: one universal connector between any AI model and any data source or tool.</p>
+  <p>The first three patterns all share a dependency: AI must connect to external systems to be useful. Before 2024, each connection required custom code — a bespoke integration for every tool and every AI app. The <a class="src" href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol (MCP)</a>, introduced by <a class="src" href="https://www.anthropic.com/news/model-context-protocol" target="_blank">Anthropic in November 2024</a>, solves this with an open standard that works like <strong>USB-C for AI</strong>: one universal connector between any AI model and any data source or tool.</p>
 
   <p>The adoption has been swift. <a class="src" href="https://en.wikipedia.org/wiki/Model_Context_Protocol" target="_blank">OpenAI and Google DeepMind adopted MCP in 2025</a>. In December 2025, the protocol was donated to the Linux Foundation, co-governed by Anthropic, Block, and OpenAI. Thousands of MCP servers already exist for tools like GitHub, Slack, databases, and CRMs — and all major agent frameworks support it natively.</p>
 
@@ -647,9 +647,9 @@
   <h4>AI APIs & model providers</h4>
   <p>The foundational building blocks. These APIs give you direct access to frontier AI models — send a prompt, get a response. Everything else in this toolkit is built on top of these.</p>
 
-  <p><a class="src" href="https://platform.openai.com" target="_blank"><strong>OpenAI API</strong></a> — Access to GPT-4o, o1, and the latest reasoning models. Supports text, images, audio, tool calling, and structured outputs.</p>
-  <p><a class="src" href="https://docs.anthropic.com" target="_blank"><strong>Anthropic API</strong></a> — Access to the Claude model family. Known for strong reasoning, long context windows (up to 200K tokens), and careful safety design.</p>
-  <p><a class="src" href="https://ai.google.dev/docs" target="_blank"><strong>Google Gemini API</strong></a> — Access to Gemini models with native multimodal support — text, images, audio, and video in a single call.</p>
+  <p><a class="src" href="https://platform.openai.com" target="_blank"><strong>OpenAI API</strong></a> — Access to GPT-5.4, GPT-5.3 Instant, and the full GPT-5 family. Supports text, images, audio, tool calling, structured outputs, and computer use.</p>
+  <p><a class="src" href="https://docs.anthropic.com" target="_blank"><strong>Anthropic API</strong></a> — Access to Claude Opus 4.6 and Sonnet 4.6. Known for strong reasoning, 1M token context window, and careful safety design.</p>
+  <p><a class="src" href="https://ai.google.dev/docs" target="_blank"><strong>Google Gemini API</strong></a> — Access to Gemini 3.1 Pro and the Gemini 3 family. Native multimodal support — text, images, audio, and video in a single call.</p>
   <p><a class="src" href="https://llama.meta.com" target="_blank"><strong>Meta Llama</strong></a> — Open-source model family you can run on your own infrastructure. Strong performance with full control over data and deployment.</p>
   <p><a class="src" href="https://mistral.ai" target="_blank"><strong>Mistral</strong></a> — European open-source models offering high performance at lower cost. Available via API or self-hosted.</p>
   <p><a class="src" href="https://openrouter.ai" target="_blank"><strong>OpenRouter</strong></a> — A unified API that gives you access to hundreds of models from every major provider (OpenAI, Anthropic, Google, Meta, Mistral, and more) through a single endpoint. Great for hackathons where teams want to experiment with different models without managing multiple API keys.</p>
@@ -692,13 +692,55 @@
 </div>
 </section>
 
-<!-- ─── SECTION 6: Opportunities ─── -->
+<!-- ─── SECTION 6: Ideation Framework ─── -->
+<section id="ideation">
+<div class="container">
+  <span class="section-number">06 — Ideation</span>
+  <h2>How to Think About Hackathon Ideas</h2>
+
+  <p>Not every workflow is a good fit for AI. The best hackathon ideas target workflows with specific characteristics that make them ripe for intelligent automation.</p>
+
+  <h4>The AI Opportunity Framework</h4>
+  <p>Look for workflows that have one or more of these properties:</p>
+
+  <div class="ideation-grid">
+    <div class="ideation-item">
+      <div class="ideation-num">1</div>
+      <div><p><strong>Lots of text or conversation.</strong> Any workflow where humans spend time reading, writing, or processing unstructured information is a natural fit for LLMs.</p></div>
+    </div>
+    <div class="ideation-item">
+      <div class="ideation-num">2</div>
+      <div><p><strong>Repetitive decision-making.</strong> If the same type of judgment call is made dozens of times a day — triage, categorization, approval — AI can handle the routine cases and escalate the edge cases.</p></div>
+    </div>
+    <div class="ideation-item">
+      <div class="ideation-num">3</div>
+      <div><p><strong>Manual research.</strong> Any time someone gathers information from multiple sources to make a decision, RAG and agents can dramatically accelerate the process.</p></div>
+    </div>
+    <div class="ideation-item">
+      <div class="ideation-num">4</div>
+      <div><p><strong>Slow processes.</strong> Workflows with long cycle times — especially those that involve waiting for human handoffs — are candidates for agent-driven orchestration.</p></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="callout-label">The simple test</span>
+    <p><strong>If a task involves reading, writing, or deciding — AI can likely help.</strong> Apply this filter to every workflow you touch, and you'll generate more ideas than you can build in a week.</p>
+  </div>
+
+  <h4>Idea starters by function</h4>
+  <p><strong>For product managers:</strong> Take any feature request backlog and ask: "Which of these could be partially or fully solved by an LLM reading the input and generating the output?" Customer onboarding flows, help center content, status notifications — all are candidates.</p>
+  <p><strong>For engineers:</strong> Look at the most tedious part of your daily workflow. Code review summaries, log analysis, test generation, incident triage, documentation updates — if you spend more than 30 minutes a day on it and it involves reading text, it's a hackathon project.</p>
+  <p><strong>For cross-functional teams:</strong> Map a complete user journey from first contact to resolution. Identify every handoff where someone reads, decides, or writes. Each of those is a potential AI intervention point.</p>
+</div>
+</section>
+
+<!-- ─── SECTION 7: Opportunities ─── -->
 <section id="opportunities">
 <div class="container">
-  <span class="section-number">06 — Applications</span>
+  <span class="section-number">07 — Example Projects</span>
   <h2>AI Opportunities Hiding in Plain Sight</h2>
 
-  <p>The most impactful AI features aren't abstract — they solve specific problems that real users face every day. Here's where AI can create immediate, tangible value across your product and operations.</p>
+  <p>The ideas below are examples to spark thinking — they are not an exhaustive list. Every company and domain will have its own unique opportunities based on its specific workflows, customer interactions, and data. Use the ideation framework above to discover the ones that matter most to your organization.</p>
 
   <h4>Customer communication</h4>
   <ul style="list-style: none; padding: 0;">
@@ -741,49 +783,7 @@
 </div>
 </section>
 
-<!-- ─── SECTION 6: Ideation Framework ─── -->
-<section id="ideation">
-<div class="container">
-  <span class="section-number">07 — Ideation</span>
-  <h2>How to Think About Hackathon Ideas</h2>
-
-  <p>Not every workflow is a good fit for AI. The best hackathon ideas target workflows with specific characteristics that make them ripe for intelligent automation.</p>
-
-  <h4>The AI Opportunity Framework</h4>
-  <p>Look for workflows that have one or more of these properties:</p>
-
-  <div class="ideation-grid">
-    <div class="ideation-item">
-      <div class="ideation-num">1</div>
-      <div><p><strong>Lots of text or conversation.</strong> Any workflow where humans spend time reading, writing, or processing unstructured information is a natural fit for LLMs.</p></div>
-    </div>
-    <div class="ideation-item">
-      <div class="ideation-num">2</div>
-      <div><p><strong>Repetitive decision-making.</strong> If the same type of judgment call is made dozens of times a day — triage, categorization, approval — AI can handle the routine cases and escalate the edge cases.</p></div>
-    </div>
-    <div class="ideation-item">
-      <div class="ideation-num">3</div>
-      <div><p><strong>Manual research.</strong> Any time someone gathers information from multiple sources to make a decision, RAG and agents can dramatically accelerate the process.</p></div>
-    </div>
-    <div class="ideation-item">
-      <div class="ideation-num">4</div>
-      <div><p><strong>Slow processes.</strong> Workflows with long cycle times — especially those that involve waiting for human handoffs — are candidates for agent-driven orchestration.</p></div>
-    </div>
-  </div>
-
-  <div class="callout">
-    <span class="callout-label">The simple test</span>
-    <p><strong>If a task involves reading, writing, or deciding — AI can likely help.</strong> Apply this filter to every workflow you touch, and you'll generate more ideas than you can build in a week.</p>
-  </div>
-
-  <h4>Idea starters by function</h4>
-  <p><strong>For product managers:</strong> Take any feature request backlog and ask: "Which of these could be partially or fully solved by an LLM reading the input and generating the output?" Customer onboarding flows, help center content, status notifications — all are candidates.</p>
-  <p><strong>For engineers:</strong> Look at the most tedious part of your daily workflow. Code review summaries, log analysis, test generation, incident triage, documentation updates — if you spend more than 30 minutes a day on it and it involves reading text, it's a hackathon project.</p>
-  <p><strong>For cross-functional teams:</strong> Map a complete user journey from first contact to resolution. Identify every handoff where someone reads, decides, or writes. Each of those is a potential AI intervention point.</p>
-</div>
-</section>
-
-<!-- ─── SECTION 7: Great Projects ─── -->
+<!-- ─── SECTION 8: Great Projects ─── -->
 <section id="great-projects">
 <div class="container">
   <span class="section-number">08 — What Good Looks Like</span>
@@ -817,7 +817,7 @@
 </div>
 </section>
 
-<!-- ─── SECTION 8: Closing ─── -->
+<!-- ─── SECTION 9: Go Build ─── -->
 <section id="closing">
 <div class="container">
   <span class="section-number">09 — What's Next</span>
@@ -826,6 +826,8 @@
   <p>AI will transform every product. The only question is who builds it first. The teams that experiment fastest will win — not because they get lucky, but because they develop the intuition, the muscle memory, and the pattern recognition that comes from building real things with real tools.</p>
 
   <p>Hackathons are the fastest way to learn. There are no wrong answers today. Every failed experiment teaches you something that reading an article or watching a demo never could. The gap between companies that are building with AI and companies that are evaluating AI is growing wider every month.</p>
+
+  <p>And the best part: hackathon projects don't have to end when the clock runs out. The most promising prototypes can — and should — move toward production. Work with your product and engineering leads to identify which ideas deserve a follow-up sprint. A rough prototype that solves a real problem is the strongest possible business case for investment. Some of the most impactful features in the industry started as scrappy hackathon demos that someone believed in enough to polish and ship.</p>
 
   <div class="callout">
     <span class="callout-label">Closing thought</span>
