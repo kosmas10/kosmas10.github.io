@@ -392,7 +392,7 @@
 <div class="hero">
   <span class="hero-label">AI Strategy Series · 2026</span>
   <h1>The <em>AI</em> Hackathon Guide</h1>
-  <p class="hero-sub">From idea to prototype. A comprehensive guide to the state of AI, the tools available today, and practical ideas for building AI-powered features during your hackathon.</p>
+  <p class="hero-sub">Why AI hackathons matter, what's possible today, which tools to use, and how to go from a blank screen to a working prototype.</p>
   <span class="hero-meta">Prepared by Kosmas Karadimitriou · AI Tech Leader · March 2026</span>
   <div class="scroll-hint">
     <span>Scroll to explore</span>
@@ -434,7 +434,7 @@
     <p><strong>An AI hackathon is your team's opportunity to get ahead of that curve.</strong> Not in theory, but in practice — building real features, solving real problems, and learning by doing. The teams that experiment fastest will define what your product looks like in 12 months.</p>
   </div>
 
-  <h4>The landscape is moving — and so must we</h4>
+  <h4>The landscape is changing fast — and so must we</h4>
   <p>The pace of change in AI is unlike anything most organizations have experienced. New models, new tools, and new capabilities are emerging on a weekly basis. What was cutting-edge six months ago is now a commodity. In this environment, traditional approaches to technology adoption — long evaluation cycles, committee-driven roadmaps, cautious pilots — simply can't keep up. Companies need new ways to quickly orient their teams, discover what's possible, and build muscle memory with these tools.</p>
 
   <h4>Why a hackathon is the right tool for this moment</h4>
@@ -689,6 +689,15 @@
     <span class="callout-label">Choosing your stack</span>
     <p><strong>Match the tool to the builder.</strong> Product managers should start with no-code builders or foundation model features — you can have a working prototype in minutes. Engineers should pick the framework that fits their architecture needs. Cross-functional teams should consider automation platforms as the glue layer. The best hackathon projects often combine tools: a PM builds the concept in Lovable while an engineer wires the AI logic with LangChain.</p>
   </div>
+
+  <h4>Quick-start stack recommendations</h4>
+  <ul style="list-style: none; padding: 0;">
+    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Fastest no-code prototype:</strong> Lovable or Bolt.new + OpenAI or Anthropic API</li>
+    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Fastest RAG prototype:</strong> Gemini File Search (zero setup) or LlamaIndex + Chroma</li>
+    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Fastest agent prototype:</strong> OpenAI Agents SDK or LangGraph</li>
+    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Fastest workflow automation:</strong> n8n or Zapier with AI nodes</li>
+    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Great for everything:</strong> Claude Cowork or Claude Code — if you're not sure where to start, start here</li>
+  </ul>
 </div>
 </section>
 
@@ -813,7 +822,16 @@
   </div>
 
   <h4>Suggested judging criteria</h4>
-  <p><strong>User impact (40%):</strong> Does this solve a real problem? Can you show a clear before-and-after? Would a user actually want this? <strong>Feasibility (25%):</strong> How realistic is it to ship this as a real feature? Is the AI output reliable enough? <strong>Creativity (20%):</strong> Does this surprise us? Is this a novel application of AI that we hadn't considered? <strong>Demo quality (15%):</strong> Can you walk us through a working prototype in under 3 minutes? The best demos tell a story: here's the problem, here's what happens now, here's how AI changes it.</p>
+  <p><strong>User impact (40%):</strong> Does this solve a real problem? Can you show a clear before-and-after? Would a user actually want this? <strong>Feasibility (30%):</strong> How realistic is it to ship this as a real feature? Is the AI output reliable enough? Could this move to production with a reasonable amount of additional work? <strong>Creativity (20%):</strong> Does this surprise us? Is this a novel application of AI that we hadn't considered? <strong>Demo quality (10%):</strong> Can you walk us through a working prototype in under 3 minutes? The best demos tell a story — which brings us to the next point.</p>
+
+  <h4>How to tell the story in your demo</h4>
+  <p>Many hackathon teams build something impressive but lose the audience because they don't tell the story well. A great demo isn't a feature walkthrough — it's a narrative. Follow this three-part structure:</p>
+
+  <p><strong>1. Show the pain.</strong> Start by showing how the workflow works today — the manual steps, the wasted time, the friction. Make the audience feel the problem before you show the solution. "Right now, when a support ticket comes in, a human reads it, decides which team should handle it, copies it into Jira, and notifies the team on Slack. This takes 5–10 minutes per ticket, hundreds of times a day."</p>
+
+  <p><strong>2. Show the prototype solving it live.</strong> Demo the working solution in real time. Don't narrate what it <em>could</em> do — show what it <em>does</em>. Use real or realistic inputs. Let the audience watch AI do the work. "Now watch: a ticket comes in, our agent reads it, classifies it as a billing issue with high urgency, creates the Jira ticket, and pings the billing team — all in under 10 seconds."</p>
+
+  <p><strong>3. Show one metric or estimated impact.</strong> Close with a number. It doesn't have to be precise — a reasonable estimate is enough to make the case. "If this handles even half of our 200 daily tickets, that's 8 hours of human time saved every day — or one full-time equivalent redeployed to higher-value work."</p>
 </div>
 </section>
 
