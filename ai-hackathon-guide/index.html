@@ -343,6 +343,77 @@
     color: var(--accent); white-space: nowrap; width: 140px;
   }
 
+  /* ── Disclosure / accordion ── */
+  .disclosure {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1rem 0;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .disclosure-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+    background: var(--surface);
+    transition: background 0.2s;
+  }
+
+  .disclosure-summary::-webkit-details-marker { display: none; }
+
+  .disclosure-summary::after {
+    content: '+';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--accent);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .disclosure[open] .disclosure-summary::after { content: '−'; }
+
+  .disclosure-summary:hover { background: var(--surface-2); }
+
+  .disclosure-summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .disclosure-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .disclosure-body > p:first-child,
+  .disclosure-body > .pattern-diagram:first-child { margin-top: 0; }
+
+  .disclosure-body h3 {
+    font-size: 1.35rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .disclosure-body h4 {
+    margin-top: 1.5rem;
+  }
+
+  .disclosure-body h4:first-child { margin-top: 0; }
+
+  .tool-list p { margin-bottom: 0.65rem; }
+  .tool-list p:last-child { margin-bottom: 0; }
+
   /* ── Separator ── */
   .sep { width: 60px; height: 2px; background: var(--border); margin: 3rem 0; }
 
@@ -405,7 +476,7 @@
   <a href="#why-now">Why Hackathons</a>
   <a href="#landscape">What Changed</a>
   <a href="#capabilities">Capabilities</a>
-  <a href="#building-blocks">Building Blocks</a>
+  <a href="#building-blocks">Architecture Patterns</a>
   <a href="#toolkit">Tools & Frameworks</a>
   <a href="#ideation">Ideation</a>
   <a href="#opportunities">Examples</a>
@@ -525,11 +596,11 @@
 </div>
 </section>
 
-<!-- ─── SECTION 4: Building Blocks ─── -->
+<!-- ─── SECTION 4: Architecture Patterns ─── -->
 <section id="building-blocks">
 <div class="container">
   <span class="section-number">04 — Architecture Patterns</span>
-  <h2>Practical AI Building Blocks</h2>
+  <h2>Practical AI Architecture Patterns</h2>
 
   <p>Modern AI applications follow a small number of well-established architecture patterns. Understanding these patterns is the fastest way to go from "what should we build?" to "here's how we build it." These are the four patterns you'll use most during the hackathon.</p>
 
@@ -540,63 +611,57 @@
     <a class="sub-topic-pill" href="#p-mcp">MCP Servers</a>
   </div>
 
-  <h3 id="p-simple">Pattern 1: Simple AI Feature</h3>
+  <details class="disclosure" id="p-simple">
+    <summary class="disclosure-summary">Pattern 1: Simple AI Feature</summary>
+    <div class="disclosure-body">
+      <div class="pattern-diagram">
+        <span class="flow-label">Architecture</span>
+        User → Prompt → LLM → Response
+      </div>
+      <p>The simplest and most common pattern. A user action triggers a prompt to a language model, and the response is surfaced directly. Behind the scenes, the key work is in <strong>prompt engineering</strong> — crafting the system instructions, providing examples, and structuring the input so the model returns consistently useful output. A well-written prompt can be the difference between a gimmick and a genuinely useful feature.</p>
+      <p>This pattern powers a wide range of applications: <strong>reply suggestions</strong> that draft responses based on conversation context, <strong>text summarization</strong> that condenses long documents into key takeaways, <strong>content rewriting</strong> that adjusts tone or format, <strong>classification</strong> that routes tickets or categorizes feedback, and <strong>sentiment analysis</strong> that detects whether a customer is happy or frustrated. The common thread: unstructured text goes in, structured value comes out.</p>
+      <p><strong>If you're new to AI, start here.</strong> A single API call to any frontier model is all you need. You can build a working prototype in under an hour — and for many real-world use cases, this pattern alone delivers significant value without any additional complexity.</p>
+    </div>
+  </details>
 
-  <div class="pattern-diagram">
-    <span class="flow-label">Architecture</span>
-    User → Prompt → LLM → Response
-  </div>
+  <details class="disclosure" id="p-rag">
+    <summary class="disclosure-summary">Pattern 2: Retrieval-Augmented Generation (RAG)</summary>
+    <div class="disclosure-body">
+      <div class="pattern-diagram">
+        <span class="flow-label">Architecture</span>
+        User Question → Vector Search → Relevant Documents → LLM Generates Answer
+      </div>
+      <p>RAG solves the biggest limitation of Pattern 1: the model only knows what it was trained on. Your company's internal documents, product specs, customer conversations, and knowledge base articles aren't in any public training set. RAG bridges that gap by <strong>retrieving relevant information from your own data</strong> at query time and injecting it into the prompt, so the model's response is grounded in facts you control.</p>
+      <p>The technical flow works like this: your documents are split into chunks and converted into numerical representations called <strong>embeddings</strong>, then stored in a vector database. When a user asks a question, the question is also embedded, and the database returns the most semantically similar chunks. These chunks become the context the LLM uses to generate its answer — with references to the source material.</p>
+      <p>This pattern powers <strong>knowledge assistants</strong> that answer questions about internal policies or product documentation, <strong>support bots</strong> grounded in your actual help center content, <strong>onboarding tools</strong> that surface relevant information for new employees, and <strong>research copilots</strong> that search across large document collections. The key advantage over a simple chatbot: RAG systems cite their sources, which makes them trustworthy enough for real business use.</p>
+    </div>
+  </details>
 
-  <p>The simplest and most common pattern. A user action triggers a prompt to a language model, and the response is surfaced directly. Behind the scenes, the key work is in <strong>prompt engineering</strong> — crafting the system instructions, providing examples, and structuring the input so the model returns consistently useful output. A well-written prompt can be the difference between a gimmick and a genuinely useful feature.</p>
+  <details class="disclosure" id="p-agents">
+    <summary class="disclosure-summary">Pattern 3: AI Agents</summary>
+    <div class="disclosure-body">
+      <div class="pattern-diagram">
+        <span class="flow-label">Architecture</span>
+        User Goal → AI Plans Steps → Uses Tools / APIs → Completes Workflow
+      </div>
+      <p>Patterns 1 and 2 are <em>reactive</em> — the user asks, the AI responds. Agents are fundamentally different: they are <strong>goal-oriented systems that plan and execute autonomously</strong>. You give an agent an objective ("research our top 5 competitors and summarize their pricing changes this quarter"), and the agent decides what steps to take, which tools to use, and how to iterate until the goal is met.</p>
+      <p>Under the hood, an agent typically runs in a <strong>reasoning loop</strong>: it observes the current state, decides the next action, executes it (often by calling an external tool or API), evaluates the result, and repeats. This loop — sometimes called ReAct (Reason + Act) — is what gives agents their power. They can search the web, query databases, read documents, send emails, create tickets, and chain all of these actions together in a single workflow.</p>
+      <p>This pattern powers <strong>automated research</strong> that gathers and synthesizes information from multiple sources, <strong>CRM automation</strong> that updates records and triggers follow-ups based on conversation context, <strong>ticket resolution</strong> that diagnoses issues, looks up solutions, and drafts responses, and <strong>multi-system orchestration</strong> where an agent coordinates across tools that don't natively talk to each other. The shift from "AI that answers questions" to "AI that completes work" is the defining transition of 2025–2026.</p>
+    </div>
+  </details>
 
-  <p>This pattern powers a wide range of applications: <strong>reply suggestions</strong> that draft responses based on conversation context, <strong>text summarization</strong> that condenses long documents into key takeaways, <strong>content rewriting</strong> that adjusts tone or format, <strong>classification</strong> that routes tickets or categorizes feedback, and <strong>sentiment analysis</strong> that detects whether a customer is happy or frustrated. The common thread: unstructured text goes in, structured value comes out.</p>
-
-  <p><strong>If you're new to AI, start here.</strong> A single API call to any frontier model is all you need. You can build a working prototype in under an hour — and for many real-world use cases, this pattern alone delivers significant value without any additional complexity.</p>
-
-  <div class="sep"></div>
-
-  <h3 id="p-rag">Pattern 2: Retrieval-Augmented Generation (RAG)</h3>
-
-  <div class="pattern-diagram">
-    <span class="flow-label">Architecture</span>
-    User Question → Vector Search → Relevant Documents → LLM Generates Answer
-  </div>
-
-  <p>RAG solves the biggest limitation of Pattern 1: the model only knows what it was trained on. Your company's internal documents, product specs, customer conversations, and knowledge base articles aren't in any public training set. RAG bridges that gap by <strong>retrieving relevant information from your own data</strong> at query time and injecting it into the prompt, so the model's response is grounded in facts you control.</p>
-
-  <p>The technical flow works like this: your documents are split into chunks and converted into numerical representations called <strong>embeddings</strong>, then stored in a vector database. When a user asks a question, the question is also embedded, and the database returns the most semantically similar chunks. These chunks become the context the LLM uses to generate its answer — with references to the source material.</p>
-
-  <p>This pattern powers <strong>knowledge assistants</strong> that answer questions about internal policies or product documentation, <strong>support bots</strong> grounded in your actual help center content, <strong>onboarding tools</strong> that surface relevant information for new employees, and <strong>research copilots</strong> that search across large document collections. The key advantage over a simple chatbot: RAG systems cite their sources, which makes them trustworthy enough for real business use.</p>
-
-  <div class="sep"></div>
-
-  <h3 id="p-agents">Pattern 3: AI Agents</h3>
-
-  <div class="pattern-diagram">
-    <span class="flow-label">Architecture</span>
-    User Goal → AI Plans Steps → Uses Tools / APIs → Completes Workflow
-  </div>
-
-  <p>Patterns 1 and 2 are <em>reactive</em> — the user asks, the AI responds. Agents are fundamentally different: they are <strong>goal-oriented systems that plan and execute autonomously</strong>. You give an agent an objective ("research our top 5 competitors and summarize their pricing changes this quarter"), and the agent decides what steps to take, which tools to use, and how to iterate until the goal is met.</p>
-
-  <p>Under the hood, an agent typically runs in a <strong>reasoning loop</strong>: it observes the current state, decides the next action, executes it (often by calling an external tool or API), evaluates the result, and repeats. This loop — sometimes called ReAct (Reason + Act) — is what gives agents their power. They can search the web, query databases, read documents, send emails, create tickets, and chain all of these actions together in a single workflow.</p>
-
-  <p>This pattern powers <strong>automated research</strong> that gathers and synthesizes information from multiple sources, <strong>CRM automation</strong> that updates records and triggers follow-ups based on conversation context, <strong>ticket resolution</strong> that diagnoses issues, looks up solutions, and drafts responses, and <strong>multi-system orchestration</strong> where an agent coordinates across tools that don't natively talk to each other. The shift from "AI that answers questions" to "AI that completes work" is the defining transition of 2025–2026.</p>
-
-  <div class="sep"></div>
-
-  <h3 id="p-mcp">Pattern 4: MCP Servers — The Interface for Agents</h3>
-
-  <div class="pattern-diagram">
-    <span class="flow-label">Architecture</span>
-    Any AI Agent → MCP Protocol → MCP Server → Any Tool, Database, or API
-  </div>
-
-  <p>The first three patterns all share a dependency: AI must connect to external systems to be useful. Before 2024, each connection required custom code — a bespoke integration for every tool and every AI app. The <a class="src" href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol (MCP)</a>, introduced by <a class="src" href="https://www.anthropic.com/news/model-context-protocol" target="_blank">Anthropic in November 2024</a>, solves this with an open standard that works like <strong>USB-C for AI</strong>: one universal connector between any AI model and any data source or tool.</p>
-
-  <p>The adoption has been swift. <a class="src" href="https://en.wikipedia.org/wiki/Model_Context_Protocol" target="_blank">OpenAI and Google DeepMind adopted MCP in 2025</a>. In December 2025, the protocol was donated to the Linux Foundation, co-governed by Anthropic, Block, and OpenAI. Thousands of MCP servers already exist for tools like GitHub, Slack, databases, and CRMs — and all major agent frameworks support it natively.</p>
-
-  <p>Here's the key idea: <strong>today's web UI was built for humans. MCP is the interface being built for agents.</strong> Humans interact with software through screens, buttons, and forms. Agents interact through MCP — discovering available capabilities, understanding inputs and outputs, and invoking tools programmatically. As the world fills with AI agents, the organizations that expose their systems through MCP will be the ones those agents can work with. This isn't just a technical convenience — it's a fundamental shift in software architecture.</p>
+  <details class="disclosure" id="p-mcp">
+    <summary class="disclosure-summary">Pattern 4: MCP Servers — The Interface for Agents</summary>
+    <div class="disclosure-body">
+      <div class="pattern-diagram">
+        <span class="flow-label">Architecture</span>
+        Any AI Agent → MCP Protocol → MCP Server → Any Tool, Database, or API
+      </div>
+      <p>The first three patterns all share a dependency: AI must connect to external systems to be useful. Before 2024, each connection required custom code — a bespoke integration for every tool and every AI app. The <a class="src" href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol (MCP)</a>, introduced by <a class="src" href="https://www.anthropic.com/news/model-context-protocol" target="_blank">Anthropic in November 2024</a>, solves this with an open standard that works like <strong>USB-C for AI</strong>: one universal connector between any AI model and any data source or tool.</p>
+      <p>The adoption has been swift. <a class="src" href="https://en.wikipedia.org/wiki/Model_Context_Protocol" target="_blank">OpenAI and Google DeepMind adopted MCP in 2025</a>. In December 2025, the protocol was donated to the Linux Foundation, co-governed by Anthropic, Block, and OpenAI. Thousands of MCP servers already exist for tools like GitHub, Slack, databases, and CRMs — and all major agent frameworks support it natively.</p>
+      <p>Here's the key idea: <strong>today's web UI was built for humans. MCP is the interface being built for agents.</strong> Humans interact with software through screens, buttons, and forms. Agents interact through MCP — discovering available capabilities, understanding inputs and outputs, and invoking tools programmatically. As the world fills with AI agents, the organizations that expose their systems through MCP will be the ones those agents can work with. This isn't just a technical convenience — it's a fundamental shift in software architecture.</p>
+    </div>
+  </details>
 
   <div class="callout cyan">
     <span class="callout-label">The bigger picture</span>
@@ -619,71 +684,92 @@
 
   <p>One of the most important things to understand about AI in 2026 is that <strong>you don't need to be a machine learning engineer to build with it.</strong> A rich ecosystem of tools exists across every skill level — from product managers who've never written code to senior engineers building production systems. Here's what's available.</p>
 
-  <h4>AI platforms & their power features</h4>
-  <p>The major AI providers ship more than APIs — they offer complete environments where non-technical users can build AI-powered experiences without code.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">AI platforms &amp; their power features</summary>
+    <div class="disclosure-body tool-list">
+      <p>The major AI providers ship more than APIs — they offer complete environments where non-technical users can build AI-powered experiences without code.</p>
+      <p><a class="src" href="https://claude.ai" target="_blank"><strong>Claude Artifacts</strong></a> — Create interactive apps, documents, and visualizations directly inside a Claude conversation. No coding environment needed.</p>
+      <p><a class="src" href="https://claude.ai" target="_blank"><strong>Claude Cowork</strong></a> — Anthropic's desktop automation tool that lets Claude operate your computer, browse the web, and complete multi-step workflows on your behalf.</p>
+      <p><a class="src" href="https://chatgpt.com" target="_blank"><strong>Custom GPTs</strong></a> — OpenAI's no-code builder for creating specialized ChatGPT assistants with custom instructions, knowledge files, and tool integrations.</p>
+      <p><a class="src" href="https://notebooklm.google" target="_blank"><strong>NotebookLM</strong></a> — Google's AI research assistant that grounds responses in your uploaded documents. Excellent for knowledge-heavy tasks and generates podcast-style audio summaries.</p>
+      <p><a class="src" href="https://aistudio.google.com" target="_blank"><strong>Google AI Studio</strong></a> — Playground for prototyping with Gemini models, supporting text, images, audio, and video in a single interface.</p>
+    </div>
+  </details>
 
-  <p><a class="src" href="https://claude.ai" target="_blank"><strong>Claude Artifacts</strong></a> — Create interactive apps, documents, and visualizations directly inside a Claude conversation. No coding environment needed.</p>
-  <p><a class="src" href="https://claude.ai" target="_blank"><strong>Claude Cowork</strong></a> — Anthropic's desktop automation tool that lets Claude operate your computer, browse the web, and complete multi-step workflows on your behalf.</p>
-  <p><a class="src" href="https://chatgpt.com" target="_blank"><strong>Custom GPTs</strong></a> — OpenAI's no-code builder for creating specialized ChatGPT assistants with custom instructions, knowledge files, and tool integrations.</p>
-  <p><a class="src" href="https://notebooklm.google" target="_blank"><strong>NotebookLM</strong></a> — Google's AI research assistant that grounds responses in your uploaded documents. Excellent for knowledge-heavy tasks and generates podcast-style audio summaries.</p>
-  <p><a class="src" href="https://aistudio.google.com" target="_blank"><strong>Google AI Studio</strong></a> — Playground for prototyping with Gemini models, supporting text, images, audio, and video in a single interface.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">No-code app builders</summary>
+    <div class="disclosure-body tool-list">
+      <p>These platforms let you build complete web applications by describing what you want in plain English. Ideal for PMs and designers who want to prototype fast.</p>
+      <p><a class="src" href="https://lovable.dev" target="_blank"><strong>Lovable</strong></a> — Generates full-stack React apps from natural language prompts, with built-in database, auth, and one-click deploy. The breakout tool of 2025–26.</p>
+      <p><a class="src" href="https://bolt.new" target="_blank"><strong>Bolt.new</strong></a> — Browser-based AI app builder by StackBlitz that generates, runs, and deploys full-stack apps entirely in the browser — no local setup needed.</p>
+      <p><a class="src" href="https://firebase.google.com/products/firebase-studio" target="_blank"><strong>Firebase Studio</strong></a> — Google's AI-powered workspace that pairs Gemini with Firebase infrastructure for app prototyping and deployment.</p>
+      <p><a class="src" href="https://www.replit.com" target="_blank"><strong>Replit</strong></a> — Cloud IDE with an AI agent that can build, debug, and deploy apps collaboratively. Great for rapid experimentation without any local environment.</p>
+      <p><a class="src" href="https://abacus.ai" target="_blank"><strong>Abacus.AI</strong></a> — Enterprise-focused platform for building AI agents and custom LLM applications with a visual interface and built-in model hosting.</p>
+    </div>
+  </details>
 
-  <h4>No-code app builders</h4>
-  <p>These platforms let you build complete web applications by describing what you want in plain English. Ideal for PMs and designers who want to prototype fast.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Automation &amp; integration platforms</summary>
+    <div class="disclosure-body tool-list">
+      <p>These tools let non-engineers connect AI to existing business systems — no code required, just visual workflows.</p>
+      <p><a class="src" href="https://zapier.com" target="_blank"><strong>Zapier</strong></a> — Connects 7,000+ apps with AI-powered automation. Build workflows like "when a support ticket arrives, use AI to classify it and route it to the right team."</p>
+      <p><a class="src" href="https://n8n.io" target="_blank"><strong>n8n</strong></a> — Open-source workflow automation with a visual canvas, hundreds of integrations, and native AI nodes for LLM calls. Self-hostable for full control.</p>
+      <p><a class="src" href="https://make.com" target="_blank"><strong>Make</strong></a> — Visual automation platform with advanced branching, error handling, and AI integrations for building sophisticated multi-step workflows.</p>
+    </div>
+  </details>
 
-  <p><a class="src" href="https://lovable.dev" target="_blank"><strong>Lovable</strong></a> — Generates full-stack React apps from natural language prompts, with built-in database, auth, and one-click deploy. The breakout tool of 2025–26.</p>
-  <p><a class="src" href="https://bolt.new" target="_blank"><strong>Bolt.new</strong></a> — Browser-based AI app builder by StackBlitz that generates, runs, and deploys full-stack apps entirely in the browser — no local setup needed.</p>
-  <p><a class="src" href="https://firebase.google.com/products/firebase-studio" target="_blank"><strong>Firebase Studio</strong></a> — Google's AI-powered workspace that pairs Gemini with Firebase infrastructure for app prototyping and deployment.</p>
-  <p><a class="src" href="https://www.replit.com" target="_blank"><strong>Replit</strong></a> — Cloud IDE with an AI agent that can build, debug, and deploy apps collaboratively. Great for rapid experimentation without any local environment.</p>
-  <p><a class="src" href="https://abacus.ai" target="_blank"><strong>Abacus.AI</strong></a> — Enterprise-focused platform for building AI agents and custom LLM applications with a visual interface and built-in model hosting.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">AI APIs &amp; model providers</summary>
+    <div class="disclosure-body tool-list">
+      <p>The foundational building blocks. These APIs give you direct access to frontier AI models — send a prompt, get a response. Everything else in this toolkit is built on top of these.</p>
+      <p><a class="src" href="https://platform.openai.com" target="_blank"><strong>OpenAI API</strong></a> — Access to GPT-5.4, GPT-5.3 Instant, and the full GPT-5 family. Supports text, images, audio, tool calling, structured outputs, and computer use.</p>
+      <p><a class="src" href="https://docs.anthropic.com" target="_blank"><strong>Anthropic API</strong></a> — Access to Claude Opus 4.6 and Sonnet 4.6. Known for strong reasoning, 1M token context window, and careful safety design.</p>
+      <p><a class="src" href="https://ai.google.dev/docs" target="_blank"><strong>Google Gemini API</strong></a> — Access to Gemini 3.1 Pro and the Gemini 3 family. Native multimodal support — text, images, audio, and video in a single call.</p>
+      <p><a class="src" href="https://llama.meta.com" target="_blank"><strong>Meta Llama</strong></a> — Open-source model family you can run on your own infrastructure. Strong performance with full control over data and deployment.</p>
+      <p><a class="src" href="https://mistral.ai" target="_blank"><strong>Mistral</strong></a> — European open-source models offering high performance at lower cost. Available via API or self-hosted.</p>
+      <p><a class="src" href="https://openrouter.ai" target="_blank"><strong>OpenRouter</strong></a> — A unified API that gives you access to hundreds of models from every major provider (OpenAI, Anthropic, Google, Meta, Mistral, and more) through a single endpoint. Great for hackathons where teams want to experiment with different models without managing multiple API keys.</p>
+    </div>
+  </details>
 
-  <h4>Automation & integration platforms</h4>
-  <p>These tools let non-engineers connect AI to existing business systems — no code required, just visual workflows.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Developer frameworks &amp; orchestration</summary>
+    <div class="disclosure-body tool-list">
+      <p>For teams building deeper AI features, these frameworks handle the plumbing — prompt chaining, memory, tool calling, agent loops, and workflow orchestration.</p>
+      <p><a class="src" href="https://python.langchain.com" target="_blank"><strong>LangChain</strong></a> — The most popular framework for building LLM applications (87K+ GitHub stars). Handles prompt chaining, memory, tool calling, and RAG pipelines.</p>
+      <p><a class="src" href="https://www.langchain.com/langgraph" target="_blank"><strong>LangGraph</strong></a> — Extension of LangChain for building stateful agent workflows as directed graphs. The go-to for complex agent logic with loops and branching.</p>
+      <p><a class="src" href="https://www.langflow.org" target="_blank"><strong>Langflow</strong></a> — Visual drag-and-drop builder for LangChain pipelines. Build RAG systems and agent workflows without writing code, then export as Python.</p>
+      <p><a class="src" href="https://www.llamaindex.ai" target="_blank"><strong>LlamaIndex</strong></a> — Specialized framework for connecting LLMs to your data. The best choice for RAG applications that need to query documents, databases, or APIs.</p>
+      <p><a class="src" href="https://www.crewai.com" target="_blank"><strong>CrewAI</strong></a> — Role-based multi-agent framework (44K+ GitHub stars). Define teams of agents with specific roles that collaborate on complex tasks.</p>
+      <p><a class="src" href="https://openai.github.io/openai-agents-python/" target="_blank"><strong>OpenAI Agents SDK</strong></a> — Lightweight Python SDK for building agents with tool calling and guardrails. A working agent in under 20 lines of code.</p>
+      <p><a class="src" href="https://dify.ai" target="_blank"><strong>Dify</strong></a> — Open-source platform for building AI apps with a visual editor, built-in RAG, agent tools, and workflow orchestration. Deploy as API or chatbot.</p>
+      <p><a class="src" href="https://ai.google.dev/gemini-api/docs/file-search" target="_blank"><strong>Gemini File Search</strong></a> — Google's fully managed RAG system built into the Gemini API. Upload documents, and the API handles chunking, embedding, retrieval, and cited answers — no vector database or pipeline setup needed.</p>
+    </div>
+  </details>
 
-  <p><a class="src" href="https://zapier.com" target="_blank"><strong>Zapier</strong></a> — Connects 7,000+ apps with AI-powered automation. Build workflows like "when a support ticket arrives, use AI to classify it and route it to the right team."</p>
-  <p><a class="src" href="https://n8n.io" target="_blank"><strong>n8n</strong></a> — Open-source workflow automation with a visual canvas, hundreds of integrations, and native AI nodes for LLM calls. Self-hostable for full control.</p>
-  <p><a class="src" href="https://make.com" target="_blank"><strong>Make</strong></a> — Visual automation platform with advanced branching, error handling, and AI integrations for building sophisticated multi-step workflows.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Vector databases</summary>
+    <div class="disclosure-body tool-list">
+      <p>The storage layer for RAG applications. These databases store document embeddings and retrieve the most relevant content for any query — search by meaning, not just keywords.</p>
+      <p><a class="src" href="https://www.trychroma.com" target="_blank"><strong>Chroma</strong></a> — Lightweight, open-source embedding database designed to be the easiest way to get started with vector search. Runs locally or in the cloud.</p>
+      <p><a class="src" href="https://www.pinecone.io" target="_blank"><strong>Pinecone</strong></a> — Fully managed vector database with a generous free tier. The most popular hosted option — upload embeddings, query by meaning, scale automatically.</p>
+      <p><a class="src" href="https://weaviate.io" target="_blank"><strong>Weaviate</strong></a> — Open-source vector database with built-in vectorization and hybrid search combining keyword and semantic matching.</p>
+      <p><a class="src" href="https://github.com/facebookresearch/faiss" target="_blank"><strong>FAISS</strong></a> — Meta's open-source library for efficient similarity search. Runs entirely in-memory — fast, lightweight, and ideal for hackathon-scale prototypes.</p>
+      <p><a class="src" href="https://qdrant.tech" target="_blank"><strong>Qdrant</strong></a> — Open-source vector database with rich filtering capabilities. Supports combining vector search with metadata filters for precise retrieval.</p>
+      <p><a class="src" href="https://milvus.io" target="_blank"><strong>Milvus</strong></a> — Open-source vector database built for scale. Handles billions of vectors with GPU-accelerated search — overkill for a hackathon, but good to know.</p>
+    </div>
+  </details>
 
-  <h4>AI APIs & model providers</h4>
-  <p>The foundational building blocks. These APIs give you direct access to frontier AI models — send a prompt, get a response. Everything else in this toolkit is built on top of these.</p>
-
-  <p><a class="src" href="https://platform.openai.com" target="_blank"><strong>OpenAI API</strong></a> — Access to GPT-5.4, GPT-5.3 Instant, and the full GPT-5 family. Supports text, images, audio, tool calling, structured outputs, and computer use.</p>
-  <p><a class="src" href="https://docs.anthropic.com" target="_blank"><strong>Anthropic API</strong></a> — Access to Claude Opus 4.6 and Sonnet 4.6. Known for strong reasoning, 1M token context window, and careful safety design.</p>
-  <p><a class="src" href="https://ai.google.dev/docs" target="_blank"><strong>Google Gemini API</strong></a> — Access to Gemini 3.1 Pro and the Gemini 3 family. Native multimodal support — text, images, audio, and video in a single call.</p>
-  <p><a class="src" href="https://llama.meta.com" target="_blank"><strong>Meta Llama</strong></a> — Open-source model family you can run on your own infrastructure. Strong performance with full control over data and deployment.</p>
-  <p><a class="src" href="https://mistral.ai" target="_blank"><strong>Mistral</strong></a> — European open-source models offering high performance at lower cost. Available via API or self-hosted.</p>
-  <p><a class="src" href="https://openrouter.ai" target="_blank"><strong>OpenRouter</strong></a> — A unified API that gives you access to hundreds of models from every major provider (OpenAI, Anthropic, Google, Meta, Mistral, and more) through a single endpoint. Great for hackathons where teams want to experiment with different models without managing multiple API keys.</p>
-
-  <h4>Developer frameworks & orchestration</h4>
-  <p>For teams building deeper AI features, these frameworks handle the plumbing — prompt chaining, memory, tool calling, agent loops, and workflow orchestration.</p>
-
-  <p><a class="src" href="https://python.langchain.com" target="_blank"><strong>LangChain</strong></a> — The most popular framework for building LLM applications (87K+ GitHub stars). Handles prompt chaining, memory, tool calling, and RAG pipelines.</p>
-  <p><a class="src" href="https://www.langchain.com/langgraph" target="_blank"><strong>LangGraph</strong></a> — Extension of LangChain for building stateful agent workflows as directed graphs. The go-to for complex agent logic with loops and branching.</p>
-  <p><a class="src" href="https://www.langflow.org" target="_blank"><strong>Langflow</strong></a> — Visual drag-and-drop builder for LangChain pipelines. Build RAG systems and agent workflows without writing code, then export as Python.</p>
-  <p><a class="src" href="https://www.llamaindex.ai" target="_blank"><strong>LlamaIndex</strong></a> — Specialized framework for connecting LLMs to your data. The best choice for RAG applications that need to query documents, databases, or APIs.</p>
-  <p><a class="src" href="https://www.crewai.com" target="_blank"><strong>CrewAI</strong></a> — Role-based multi-agent framework (44K+ GitHub stars). Define teams of agents with specific roles that collaborate on complex tasks.</p>
-  <p><a class="src" href="https://openai.github.io/openai-agents-python/" target="_blank"><strong>OpenAI Agents SDK</strong></a> — Lightweight Python SDK for building agents with tool calling and guardrails. A working agent in under 20 lines of code.</p>
-  <p><a class="src" href="https://dify.ai" target="_blank"><strong>Dify</strong></a> — Open-source platform for building AI apps with a visual editor, built-in RAG, agent tools, and workflow orchestration. Deploy as API or chatbot.</p>
-  <p><a class="src" href="https://ai.google.dev/gemini-api/docs/file-search" target="_blank"><strong>Gemini File Search</strong></a> — Google's fully managed RAG system built into the Gemini API. Upload documents, and the API handles chunking, embedding, retrieval, and cited answers — no vector database or pipeline setup needed.</p>
-
-  <h4>Vector databases</h4>
-  <p>The storage layer for RAG applications. These databases store document embeddings and retrieve the most relevant content for any query — search by meaning, not just keywords.</p>
-
-  <p><a class="src" href="https://www.trychroma.com" target="_blank"><strong>Chroma</strong></a> — Lightweight, open-source embedding database designed to be the easiest way to get started with vector search. Runs locally or in the cloud.</p>
-  <p><a class="src" href="https://www.pinecone.io" target="_blank"><strong>Pinecone</strong></a> — Fully managed vector database with a generous free tier. The most popular hosted option — upload embeddings, query by meaning, scale automatically.</p>
-  <p><a class="src" href="https://weaviate.io" target="_blank"><strong>Weaviate</strong></a> — Open-source vector database with built-in vectorization and hybrid search combining keyword and semantic matching.</p>
-  <p><a class="src" href="https://github.com/facebookresearch/faiss" target="_blank"><strong>FAISS</strong></a> — Meta's open-source library for efficient similarity search. Runs entirely in-memory — fast, lightweight, and ideal for hackathon-scale prototypes.</p>
-  <p><a class="src" href="https://qdrant.tech" target="_blank"><strong>Qdrant</strong></a> — Open-source vector database with rich filtering capabilities. Supports combining vector search with metadata filters for precise retrieval.</p>
-  <p><a class="src" href="https://milvus.io" target="_blank"><strong>Milvus</strong></a> — Open-source vector database built for scale. Handles billions of vectors with GPU-accelerated search — overkill for a hackathon, but good to know.</p>
-
-  <h4>AI-powered coding tools</h4>
-  <p>For engineers, these tools turn AI into a pair programmer that writes, edits, and debugs code alongside you.</p>
-
-  <p><a class="src" href="https://claude.ai/code" target="_blank"><strong>Claude Code</strong></a> — Anthropic's command-line coding agent. Give it a task in natural language and it navigates your codebase, writes code, runs tests, and commits — all from the terminal.</p>
-  <p><a class="src" href="https://cursor.com" target="_blank"><strong>Cursor</strong></a> — AI-native code editor (VS Code fork) with deep codebase awareness. Edits across multiple files, explains code, and generates implementations from descriptions.</p>
-  <p><a class="src" href="https://windsurf.com" target="_blank"><strong>Windsurf</strong></a> — AI coding IDE with "Cascade" flows that handle multi-step coding tasks autonomously, maintaining context across your entire project.</p>
-  <p><a class="src" href="https://www.antigravity.dev" target="_blank"><strong>Antigravity</strong></a> — AI coding environment designed for building full applications with an agent that can scaffold, iterate, and deploy projects end to end.</p>
-  <p><a class="src" href="https://github.com/features/copilot" target="_blank"><strong>GitHub Copilot</strong></a> — AI code completion integrated into VS Code and JetBrains. Inline suggestions and chat — best as an accelerator within your existing IDE workflow.</p>
+  <details class="disclosure">
+    <summary class="disclosure-summary">AI-powered coding tools</summary>
+    <div class="disclosure-body tool-list">
+      <p>For engineers, these tools turn AI into a pair programmer that writes, edits, and debugs code alongside you.</p>
+      <p><a class="src" href="https://claude.ai/code" target="_blank"><strong>Claude Code</strong></a> — Anthropic's command-line coding agent. Give it a task in natural language and it navigates your codebase, writes code, runs tests, and commits — all from the terminal.</p>
+      <p><a class="src" href="https://cursor.com" target="_blank"><strong>Cursor</strong></a> — AI-native code editor (VS Code fork) with deep codebase awareness. Edits across multiple files, explains code, and generates implementations from descriptions.</p>
+      <p><a class="src" href="https://windsurf.com" target="_blank"><strong>Windsurf</strong></a> — AI coding IDE with "Cascade" flows that handle multi-step coding tasks autonomously, maintaining context across your entire project.</p>
+      <p><a class="src" href="https://www.antigravity.dev" target="_blank"><strong>Antigravity</strong></a> — AI coding environment designed for building full applications with an agent that can scaffold, iterate, and deploy projects end to end.</p>
+      <p><a class="src" href="https://github.com/features/copilot" target="_blank"><strong>GitHub Copilot</strong></a> — AI code completion integrated into VS Code and JetBrains. Inline suggestions and chat — best as an accelerator within your existing IDE workflow.</p>
+    </div>
+  </details>
 
   <div class="callout">
     <span class="callout-label">Choosing your stack</span>
@@ -751,37 +837,53 @@
 
   <p>The ideas below are examples to spark thinking — they are not an exhaustive list. Every company and domain will have its own unique opportunities based on its specific workflows, customer interactions, and data. Use the ideation framework above to discover the ones that matter most to your organization.</p>
 
-  <h4>Customer communication</h4>
-  <ul style="list-style: none; padding: 0;">
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Intelligent ticket routing</strong> — build a Zapier/n8n workflow that reads incoming support messages, classifies them by topic and urgency using an LLM, and routes them to the right team automatically</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Smart reply drafting with tone control</strong> — a tool that takes a customer message plus internal context (account status, past interactions) and drafts a reply in the company's voice, with toggles for tone (empathetic, direct, escalation)</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Churn risk alerting</strong> — an agent that monitors recent customer conversations, scores sentiment trends over time, and flags accounts showing declining satisfaction before they cancel</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>FAQ auto-generator</strong> — feed your support ticket history into an LLM and have it identify the most common questions, then generate a draft FAQ or help center article for each one</li>
-  </ul>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Customer communication</summary>
+    <div class="disclosure-body">
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Intelligent ticket routing</strong> — build a Zapier/n8n workflow that reads incoming support messages, classifies them by topic and urgency using an LLM, and routes them to the right team automatically</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Smart reply drafting with tone control</strong> — a tool that takes a customer message plus internal context (account status, past interactions) and drafts a reply in the company's voice, with toggles for tone (empathetic, direct, escalation)</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Churn risk alerting</strong> — an agent that monitors recent customer conversations, scores sentiment trends over time, and flags accounts showing declining satisfaction before they cancel</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>FAQ auto-generator</strong> — feed your support ticket history into an LLM and have it identify the most common questions, then generate a draft FAQ or help center article for each one</li>
+      </ul>
+    </div>
+  </details>
 
-  <h4>Sales enablement</h4>
-  <ul style="list-style: none; padding: 0;">
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Personalized follow-up drafter</strong> — an agent that reads a sales call transcript or email thread, identifies key discussion points and commitments, and drafts a tailored follow-up email ready to send</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Competitor battlecard generator</strong> — a RAG tool that ingests your competitive intelligence docs, then answers rep questions like "how do we compare to X on pricing?" with sourced, up-to-date responses</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Deal risk scorer</strong> — analyze CRM data and recent communications to flag deals that are going cold, with a brief explanation of why (e.g., "no reply in 12 days, last sentiment was neutral")</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Prospect research assistant</strong> — given a company name, automatically pull public information (website, recent news, LinkedIn) and generate a one-page briefing for a sales rep before a call</li>
-  </ul>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Sales enablement</summary>
+    <div class="disclosure-body">
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Personalized follow-up drafter</strong> — an agent that reads a sales call transcript or email thread, identifies key discussion points and commitments, and drafts a tailored follow-up email ready to send</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Competitor battlecard generator</strong> — a RAG tool that ingests your competitive intelligence docs, then answers rep questions like "how do we compare to X on pricing?" with sourced, up-to-date responses</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Deal risk scorer</strong> — analyze CRM data and recent communications to flag deals that are going cold, with a brief explanation of why (e.g., "no reply in 12 days, last sentiment was neutral")</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Prospect research assistant</strong> — given a company name, automatically pull public information (website, recent news, LinkedIn) and generate a one-page briefing for a sales rep before a call</li>
+      </ul>
+    </div>
+  </details>
 
-  <h4>Internal productivity</h4>
-  <ul style="list-style: none; padding: 0;">
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Automated documentation from code changes</strong> — a Claude Code skill or GitHub Action that reads a PR diff and auto-generates or updates the relevant section of internal documentation</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Internal knowledge chatbot</strong> — a RAG-powered assistant that answers employee questions grounded in your company wiki, Confluence pages, or shared drives — with source citations</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Standup report generator</strong> — an agent that pulls your team's recent commits, Jira updates, and Slack messages, then drafts a daily standup summary or weekly status report</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Onboarding buddy</strong> — a chatbot trained on your onboarding docs, org chart, and HR policies that new hires can ask anything — "where do I find the VPN setup guide?" or "who owns the billing service?"</li>
-  </ul>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Internal productivity</summary>
+    <div class="disclosure-body">
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Automated documentation from code changes</strong> — a Claude Code skill or GitHub Action that reads a PR diff and auto-generates or updates the relevant section of internal documentation</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Internal knowledge chatbot</strong> — a RAG-powered assistant that answers employee questions grounded in your company wiki, Confluence pages, or shared drives — with source citations</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Standup report generator</strong> — an agent that pulls your team's recent commits, Jira updates, and Slack messages, then drafts a daily standup summary or weekly status report</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Onboarding buddy</strong> — a chatbot trained on your onboarding docs, org chart, and HR policies that new hires can ask anything — "where do I find the VPN setup guide?" or "who owns the billing service?"</li>
+      </ul>
+    </div>
+  </details>
 
-  <h4>Product intelligence</h4>
-  <ul style="list-style: none; padding: 0;">
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Feature request mining</strong> — process a backlog of support tickets or feedback forms with an LLM to extract, cluster, and rank the most-requested features, with representative quotes</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Automated insight discovery</strong> — build a pipeline that ingests your customer interaction data, identifies recurring pain points or usage patterns, and generates a weekly digest for the product team</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Release notes writer</strong> — given a set of merged PRs or Jira tickets for a release, auto-generate customer-facing release notes in plain language, categorized by feature area</li>
-    <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>NPS response analyzer</strong> — take raw NPS survey responses, classify them by theme (pricing, UX, performance, support), score sentiment, and produce an executive summary with actionable takeaways</li>
-  </ul>
+  <details class="disclosure">
+    <summary class="disclosure-summary">Product intelligence</summary>
+    <div class="disclosure-body">
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Feature request mining</strong> — process a backlog of support tickets or feedback forms with an LLM to extract, cluster, and rank the most-requested features, with representative quotes</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Automated insight discovery</strong> — build a pipeline that ingests your customer interaction data, identifies recurring pain points or usage patterns, and generates a weekly digest for the product team</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Release notes writer</strong> — given a set of merged PRs or Jira tickets for a release, auto-generate customer-facing release notes in plain language, categorized by feature area</li>
+        <li style="margin-bottom: 0.75rem; padding-left: 1.2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>NPS response analyzer</strong> — take raw NPS survey responses, classify them by theme (pricing, UX, performance, support), score sentiment, and produce an executive summary with actionable takeaways</li>
+      </ul>
+    </div>
+  </details>
 
   <div class="callout warm">
     <span class="callout-label">Hackathon guidance</span>
@@ -888,11 +990,42 @@ const fadeObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-document.querySelectorAll('.callout, .stat-grid, .cap-grid, .pattern-diagram, .ideation-grid, .two-col, h3, h4').forEach(el => {
+document.querySelectorAll('.callout, .stat-grid, .cap-grid, .two-col, .disclosure, .era-table, .ideation-grid, h4').forEach(el => {
+  if (el.closest('.disclosure-body')) return;
   el.style.opacity = '0';
   el.style.transform = 'translateY(20px)';
   el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
   fadeObserver.observe(el);
+});
+
+function openDisclosureById(id) {
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el && el.tagName === 'DETAILS' && el.classList.contains('disclosure')) {
+    el.open = true;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+}
+
+function syncHashToDisclosure() {
+  openDisclosureById(window.location.hash.slice(1));
+}
+
+window.addEventListener('hashchange', syncHashToDisclosure);
+syncHashToDisclosure();
+
+document.querySelectorAll('.sub-topic-pill[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', (e) => {
+    const id = anchor.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (target && target.tagName === 'DETAILS') {
+      e.preventDefault();
+      openDisclosureById(id);
+      history.replaceState(null, '', '#' + id);
+    }
+  });
 });
 </script>
 
