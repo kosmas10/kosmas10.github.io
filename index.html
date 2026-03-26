@@ -3,40 +3,254 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kosmas Karadimitriou — notes on AI, technology, and strategy.">
   <title>Kosmas Karadimitriou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-deep: #05080d;
+      --bg-mid: #0a1018;
+      --cyan: #2ee6ff;
+      --cyan-dim: rgba(46, 230, 255, 0.45);
+      --violet: #a78bfa;
+      --violet-dim: rgba(167, 139, 250, 0.35);
+      --text: #e8f4ff;
+      --text-muted: #8ba3b8;
+      --card-bg: rgba(12, 22, 36, 0.65);
+      --card-border: rgba(46, 230, 255, 0.18);
+      --glow: 0 0 0 1px rgba(46, 230, 255, 0.12), 0 0 48px rgba(46, 230, 255, 0.06);
+      --glow-hover: 0 0 0 1px rgba(46, 230, 255, 0.35), 0 0 60px rgba(46, 230, 255, 0.14), 0 0 100px rgba(167, 139, 250, 0.08);
+      --radius: 10px;
+      --max: 640px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-      line-height: 1.6;
-      color: #222;
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Exo 2", system-ui, sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      color: var(--text);
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 100% 70% at 50% -30%, rgba(46, 230, 255, 0.14), transparent 50%),
+        radial-gradient(ellipse 60% 50% at 100% 20%, rgba(167, 139, 250, 0.1), transparent 45%),
+        radial-gradient(ellipse 50% 40% at 0% 90%, rgba(46, 230, 255, 0.06), transparent 40%),
+        linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 45%, #030508 100%);
     }
-    h1 { margin-bottom: 0.2em; }
-    .subtitle { color: #666; margin-bottom: 2em; }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(46, 230, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(46, 230, 255, 0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 20%, transparent 70%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1.25rem, 5vw, 2rem) 4rem;
+    }
+
+    header {
+      margin-bottom: 2.75rem;
+      padding-bottom: 2rem;
+      background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent) bottom / 100% 1px no-repeat;
+    }
+
+    h1 {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0 0 1rem;
+      color: var(--text);
+      text-shadow: 0 0 40px rgba(46, 230, 255, 0.35);
+    }
+
+    .subtitle {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0;
+      max-width: 42ch;
+      line-height: 1.5;
+    }
+
+    .subtitle em {
+      font-style: normal;
+      color: var(--cyan);
+      text-shadow: 0 0 20px rgba(46, 230, 255, 0.5);
+    }
+
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.125rem;
+    }
+
+    .list li {
+      margin: 0;
+    }
+
     .card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 18px 20px;
-      margin: 16px 0;
+      display: block;
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem 1.45rem;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--glow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.3s ease,
+        border-color 0.25s ease;
     }
-    a { color: #0a58ca; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(46, 230, 255, 0.25), transparent 40%, transparent 60%, rgba(167, 139, 250, 0.2));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow-hover);
+      border-color: rgba(46, 230, 255, 0.4);
+    }
+
+    .card:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 4px;
+    }
+
+    .card h2 {
+      font-family: "Exo 2", sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+      margin: 0 0 0.5rem;
+      color: var(--cyan);
+      transition: color 0.25s ease, text-shadow 0.25s ease;
+      text-shadow: 0 0 24px rgba(46, 230, 255, 0.25);
+    }
+
+    .card:hover h2 {
+      color: #7ff5ff;
+      text-shadow: 0 0 32px rgba(46, 230, 255, 0.45);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .card-arrow {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--violet);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .card:hover .card-arrow {
+      color: #c4b5fd;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      background: linear-gradient(90deg, transparent, rgba(139, 163, 184, 0.28), transparent) top / 100% 1px no-repeat;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
-  <h1>Kosmas Karadimitriou</h1>
-  <div class="subtitle">AI, technology, and strategy notes</div>
+  <div class="wrap">
+    <header>
+      <h1>Kosmas Karadimitriou, Ph.D.</h1>
+      <p class="subtitle"><em>AI</em>, technology, and strategy notes</p>
+    </header>
 
-  <div class="card">
-    <h2><a href="/state-of-ai-2026/">The State of AI 2026 &amp; Beyond</a></h2>
-    <p>A report on where AI is heading over the next several years.</p>
-  </div>
+    <ul class="list">
+      <li>
+        <a class="card" href="/state-of-ai-2026/">
+          <h2>The State of AI 2026 &amp; Beyond</h2>
+          <p>A report on where AI is heading over the next several years.</p>
+          <span class="card-arrow" aria-hidden="true">Open →</span>
+        </a>
+      </li>
+      <li>
+        <a class="card" href="/ai-hackathon-guide/">
+          <h2>The AI Hackathon Guide</h2>
+          <p>A guide to building AI-powered features during your hackathon.</p>
+          <span class="card-arrow" aria-hidden="true">Open →</span>
+        </a>
+      </li>
+    </ul>
 
-  <div class="card">
-    <h2><a href="/ai-hackathon-guide/">The AI Hackathon Guide</a></h2>
-    <p>A guide to building AI-powered features during your hackathon.</p>
+    <footer>
+      Personal site &middot; GitHub Pages
+    </footer>
   </div>
 </body>
 </html>
