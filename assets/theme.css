@@ -742,4 +742,6 @@ a.src:hover {
   .stat-grid, .cap-grid, .two-col, .ideation-grid { grid-template-columns: 1fr; }
   section { padding: 3rem 0; }
   .container { padding: 0 1.25rem; }
+  /* Move the toggle to the bottom-right so it clears the full-width sticky nav. */
+  .theme-toggle { top: auto; bottom: 1rem; right: 1rem; }
 }
