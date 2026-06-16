@@ -81,4 +81,54 @@
       });
     });
   }
+
+  /* ── Dark / light theme toggle ──
+     Floating segmented Light/Dark pill injected here so every page that
+     loads this file gets it for free. The initial theme is applied before
+     paint by a small inline guard in each page's <head>; this block keeps
+     the control's state in sync and persists the user's choice. The default
+     (no stored choice) is dark. */
+  const STORAGE_KEY = 'site-theme';
+
+  const storedTheme = () => {
+    try {
+      const t = localStorage.getItem(STORAGE_KEY);
+      return t === 'light' || t === 'dark' ? t : null;
+    } catch (e) { return null; }
+  };
+
+  const getPreferred = () => storedTheme() || 'dark';
+
+  const SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+  const MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+  const makeOpt = (value, label, svg) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-toggle__opt theme-toggle__opt--' + value;
+    btn.innerHTML = svg + '<span>' + label + '</span>';
+    btn.addEventListener('click', () => {
+      applyTheme(value);
+      try { localStorage.setItem(STORAGE_KEY, value); } catch (e) {}
+    });
+    return btn;
+  };
+
+  const toggle = document.createElement('div');
+  toggle.className = 'theme-toggle';
+  toggle.setAttribute('role', 'group');
+  toggle.setAttribute('aria-label', 'Theme');
+  const lightOpt = makeOpt('light', 'Light', SUN_SVG);
+  const darkOpt = makeOpt('dark', 'Dark', MOON_SVG);
+  toggle.appendChild(lightOpt);
+  toggle.appendChild(darkOpt);
+
+  const applyTheme = (theme) => {
+    document.documentElement.dataset.theme = theme;
+    lightOpt.setAttribute('aria-pressed', String(theme === 'light'));
+    darkOpt.setAttribute('aria-pressed', String(theme === 'dark'));
+  };
+
+  document.body.appendChild(toggle);
+  applyTheme(getPreferred());
 })();

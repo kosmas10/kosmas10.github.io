@@ -6,6 +6,15 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <title>The AI Hackathon Guide — From Idea to Prototype</title>
 <link rel="stylesheet" href="../assets/theme.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('site-theme');
+      if (t !== 'light' && t !== 'dark') t = 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 

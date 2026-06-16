@@ -11,8 +11,13 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ── Design tokens ── */
+/* ── Design tokens ──
+   Light is the default token set. Dark overrides them via the
+   [data-theme="dark"] attribute set on <html> by /assets/theme.js
+   (and an inline head guard on each page to avoid a flash). Brightened
+   accents keep contrast legible on the dark background. */
 :root {
+  color-scheme: light;
   --bg: #ffffff;
   --surface: #f5f5f7;
   --surface-2: #ebebef;
@@ -26,6 +31,27 @@
   --green: #047857;
   --rose: #be123c;
   --cyan: #0e7490;
+  --toc-bg: rgba(255,255,255,0.92);
+  --src-hover: #3730a3;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1116;
+  --surface: #171b22;
+  --surface-2: #21262f;
+  --border: #2c333d;
+  --text: #e8ebf0;
+  --text-dim: #aab2bd;
+  --accent: #818cf8;
+  --accent-glow: rgba(129,140,248,0.12);
+  --warm: #fbbf24;
+  --warm-glow: rgba(251,191,36,0.08);
+  --green: #34d399;
+  --rose: #fb7185;
+  --cyan: #22d3ee;
+  --toc-bg: rgba(14,17,22,0.9);
+  --src-hover: #a5b4fc;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,6 +67,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color .35s ease, color .35s ease;
 }
 
 /* ── Scrollbar ── */
@@ -155,7 +182,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.92);
+  background: var(--toc-bg);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   padding: 0.75rem 2rem;
@@ -627,8 +654,8 @@ a.src {
   font-size: inherit;
 }
 a.src:hover {
-  color: #3730a3;
-  border-bottom-color: #3730a3;
+  color: var(--src-hover);
+  border-bottom-color: var(--src-hover);
 }
 .stat-card a.src {
   font-size: 0.8rem;
@@ -653,6 +680,61 @@ a.src:hover {
   font-weight: 700;
   color: var(--text);
   margin-bottom: 0.5rem;
+}
+
+/* ── Theme toggle (floating segmented Light/Dark pill, injected by theme.js) ── */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle__opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.theme-toggle__opt:hover { color: var(--text); }
+
+.theme-toggle__opt:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle__opt svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+/* Active segment reflects the current theme. */
+:root[data-theme="light"] .theme-toggle__opt--light,
+:root[data-theme="dark"] .theme-toggle__opt--dark {
+  background: var(--accent);
+  color: var(--bg);
 }
 
 /* ── Responsive ── */
