@@ -153,6 +153,25 @@ body {
   position: relative;
 }
 
+.hero-link {
+  display: inline-block;
+  margin-top: 1.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+  transition: border-color 0.2s, color 0.2s;
+  position: relative;
+}
+
+.hero-link:hover {
+  color: var(--src-hover);
+  border-bottom-color: var(--src-hover);
+}
+
 .scroll-hint {
   position: absolute;
   bottom: 2rem;
